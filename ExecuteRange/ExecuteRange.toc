@@ -1,0 +1,18 @@
+## Interface: 60200
+## Title: Execute Range
+## Author: Akira GTX
+## Version: 1.3
+## Notes: Dsplays a button glow and an optional spell alert when the target is within "Execute" range.|n|n|cFFFFFF00Class-Spells Supported:|r|nRogue - Dispatch |nWarlock - Shadowburn |nPriest - Shadow Word: Death |nMonk - Touch of Death |nDeath Knight - Soul Reaper |nWarrior - Execute |nPaladin - Hammer of Wrath
+## DefaultState: Enabled
+## LoadOnDemand: 0
+## SavedVariables: ExecuteRangeDB
+embeds.xml
+Init.lua
+Console.lua
+Constants.lua
+Settings.lua
+ButtonsResolver.lua
+SettingsFormEvents.lua
+SpellAlertsHandler.lua
+Core.lua
+SettingsForm.xml
