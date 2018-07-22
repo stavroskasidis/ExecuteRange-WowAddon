@@ -11,21 +11,27 @@ function ExecuteRange_SpellAlertsHandler:ShowOrHideFlasher()
     local maxHealth = UnitHealthMax("target"); 
     local percentage = (health/maxHealth) * 100;
     local executeRange = ExecuteRange_SpellAlertsHandler:GetExecuteRange();
-    ExecuteRange_Console:Debug("percentage" .. percentage);
-    ExecuteRange_Console:Debug("maxHealth" .. maxHealth);
-    ExecuteRange_Console:Debug("health" .. health);
-    ExecuteRange_Console:Debug("executeRange" .. executeRange);	
+    ExecuteRange_Console:Debug("percentage: " .. percentage);
+    ExecuteRange_Console:Debug("maxHealth: " .. maxHealth);
+    ExecuteRange_Console:Debug("health: " .. health);
+    ExecuteRange_Console:Debug("executeRange: " .. executeRange);	
     if percentage <= executeRange and not UnitIsDead("target") and UnitCanAttack("player","target") then 
         -- Show Glow
         ExecuteRange_Console:Debug("will show alert");
         local foundButtons = ExecuteRange_ButtonsResolver:GetValidButtons();
 
+		local glowShown = false;
         for id,button in pairs(foundButtons) do
-            ActionButton_ShowOverlayGlow(button);
+			local spellId = ExecuteRange_ButtonsResolver:GetButtonSpellId(button);
+			local start, duration = GetSpellCooldown(spellId);
+			if ExecuteRange_DB.profile.showOnCooldown or duration == 0 then -- spell is not on cooldown or is shown always
+				ActionButton_ShowOverlayGlow(button);
+				glowShown = true;
+			end
         end
 
         --Show Spell Alert
-        if ExecuteRange_DB.profile.showSpellAlert and table.getn(foundButtons) > 0  then
+        if ExecuteRange_DB.profile.showSpellAlert and glowShown  then
             ExecuteRange_Console:Debug("showing alert");
             ExecuteRange_SpellAlertsHandler:ShowSpellAlert();
         end
@@ -79,51 +85,31 @@ end
 function ExecuteRange_SpellAlertsHandler:GetExecuteRange()
     ExecuteRange_Console:Debug("geting execute range")	
     if ExecuteRange_Settings.CurrentClass == "ROGUE" then
-        return ExecuteRange_Constants.DISPATCH_EXECUTE_RANGE;
+        return ExecuteRange_Constants.BLINDSIDE_EXECUTE_RANGE;
     elseif ExecuteRange_Settings.CurrentClass == "WARLOCK" then
-        return ExecuteRange_Constants.SHADOWBURN_EXECUTE_RANGE;
+        return ExecuteRange_Constants.DRAIN_SOUL_EXECUTE_RANGE;
     elseif ExecuteRange_Settings.CurrentClass == "PRIEST" then
         return ExecuteRange_Constants.SHADOW_WORD_DEATH_EXECUTE_RANGE;
     elseif ExecuteRange_Settings.CurrentClass == "DEATHKNIGHT" then
-        --check if deathknight has draenor perk "Improved Soul Reaper"
-        spellName = GetSpellInfo("Improved Soul Reaper");
-        if spellName~=nill then 
-            ExecuteRange_Console:Debug("dk has perk")
-            return ExecuteRange_Constants.IMPROVED_SOUL_REAPER_EXECUTE_RANGE;
-        else
-            return ExecuteRange_Constants.NORMAL_SOUL_REAPER_EXECUTE_RANGE;
-        end
+        return ExecuteRange_Constants.SOUL_REAPER_EXECUTE_RANGE;
     elseif ExecuteRange_Settings.CurrentClass == "PALADIN" then
-        local id, specName, description, icon, background,role=GetSpecializationInfo(GetSpecialization());
-        --For Paladins we first check if spec is Retribution and Avenging Wrath is active. If not return the execute range
-        if specName == "Retribution" then
-            ExecuteRange_Console:Debug("pala is retri")
-            if ExecuteRange_SpellAlertsHandler:UnitHasBuff("player","Avenging Wrath") then
-                ExecuteRange_Console:Debug("avenging wrath is active")
-                return 101;		--A execute range of 101 will always be higher than the target's life percentage, so the effect will be activated
-            end
+        if ExecuteRange_SpellAlertsHandler:UnitHasBuff("player","Avenging Wrath") then
+            ExecuteRange_Console:Debug("avenging wrath is active")
+            return 101;		--An execute range of 101 will always be higher than the target's life percentage, so the effect will be activated
         end
-                --check if paladin has draenor perk "Empowered Hammer of Wrath"
-        spellName = GetSpellInfo("Empowered Hammer of Wrath");
-        if spellName~=nill then 
-            ExecuteRange_Console:Debug("pala has perk")
-            return ExecuteRange_Constants.EMPOWERED_HAMMER_OF_WRATH_EXECUTE_RANGE;
-        else
-            return ExecuteRange_Constants.NORMAL_HAMMER_OF_WRATH_EXECUTE_RANGE;
-        end
+		return ExecuteRange_Constants.HAMMER_OF_WRATH_EXECUTE_RANGE;
     elseif ExecuteRange_Settings.CurrentClass == "WARRIOR" then
         --For Warriors we first check if Sudden Death proc is active. If not return the normal Execute range
         if ExecuteRange_SpellAlertsHandler:UnitHasBuff("player","Sudden Death") then
             return 101;		--A execute range of 101 will always be higher than the target's life percentage, so the effect will be activated
         else 
-            return ExecuteRange_Constants.EXECUTE_RANGE;
-        end
-    elseif ExecuteRange_Settings.CurrentClass == "MONK" then  
-    --Monk is a special case. The percentage is not fixed. If the buff "Death Note" is active you can cast Touch of Death.
-        if ExecuteRange_SpellAlertsHandler:UnitHasBuff("player","Death Note") then -- if name is nil then "Death Note" is not active
-            return 101;		--A execute range of 101 will always be higher than the target's life percentage, so the effect will be activated
-        else 
-            return 0;		--A execute range of 0 will always be lower than the target's life percentage, so the effect will NOT be activated
+			local talentID, name, texture, selected = GetTalentInfo(5, 2, 1); -- check if massacre is learned
+			local id, specName = GetSpecializationInfo(GetSpecialization());
+			if specName == "Fury" and selected then  -- Fury with "Massacre" Talent
+				return ExecuteRange_Constants.EXECUTE_RANGE_MASSACRE;
+			else
+				return ExecuteRange_Constants.EXECUTE_RANGE;
+			end
         end
     end
 end

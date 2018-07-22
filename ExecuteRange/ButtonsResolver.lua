@@ -6,7 +6,7 @@ local ExecuteRange_Console = ExecuteRange_Console;
 
 ExecuteRange_ButtonsResolver.Buttons = nil ; 
 
---Finds the buttons that have valid abilities e.x. "Dispatch", "Shadowburn" etc
+--Finds the buttons that have valid abilities e.x. "Execute", "Hammer of Wrath" etc
 --@param buttons The array of buttons to look into
 function ExecuteRange_ButtonsResolver:GetValidButtons()
     --init buttons array
@@ -17,17 +17,24 @@ function ExecuteRange_ButtonsResolver:GetValidButtons()
     local foundButtons = {};
     for name,button in pairs(ExecuteRange_ButtonsResolver.Buttons) do
         local LAB = LibStub("LibActionButton-1.0", true);
-        local type,spellID,subType; 
-        if(LAB) then --bartender
-            spellID = button:GetSpellId();
-        else		--blizzard
-            type,spellID,subType  = GetActionInfo(button.action);
-        end
-        if ExecuteRange_ButtonsResolver:TableContainsItem(ExecuteRange_Constants.VALID_SPELLS,spellID) then
+        local spellId = ExecuteRange_ButtonsResolver:GetButtonSpellId(button);
+        if ExecuteRange_ButtonsResolver:TableContainsItem(ExecuteRange_Constants.VALID_SPELLS_IDS,spellId) then
             table.insert(foundButtons,button);
         end
     end
     return foundButtons;
+end
+
+function ExecuteRange_ButtonsResolver:GetButtonSpellId(button)
+	local LAB = LibStub("LibActionButton-1.0", true);
+	local type, spellId; 
+	if(LAB) then --bartender
+		spellId = button:GetSpellId();
+	else		 --blizzardUI
+		type,spellId = GetActionInfo(button.action);
+	end
+
+	return spellId;
 end
 
 --Checks if an item is contained in a table
