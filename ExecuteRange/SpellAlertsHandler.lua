@@ -11,34 +11,38 @@ function ExecuteRange_SpellAlertsHandler:ShowOrHideFlasher()
     local maxHealth = UnitHealthMax("target"); 
     local percentage = (health/maxHealth) * 100;
     local executeRange = ExecuteRange_SpellAlertsHandler:GetExecuteRange();
-    ExecuteRange_Console:Debug("percentage: " .. percentage);
-    ExecuteRange_Console:Debug("maxHealth: " .. maxHealth);
-    ExecuteRange_Console:Debug("health: " .. health);
-    ExecuteRange_Console:Debug("executeRange: " .. executeRange);	
+    ExecuteRange_Console:Debug("======== ShowOrHideFlasher start =============");
+	ExecuteRange_Console:Debug("info: percentage: " .. percentage);
+    --ExecuteRange_Console:Debug("info: maxHealth: " .. maxHealth);
+    --ExecuteRange_Console:Debug("info: health: " .. health);
+    --ExecuteRange_Console:Debug("info: executeRange: " .. executeRange);	
     if percentage <= executeRange and not UnitIsDead("target") and UnitCanAttack("player","target") then 
         -- Show Glow
-        ExecuteRange_Console:Debug("will show alert");
+        ExecuteRange_Console:Debug(" =>   Will show alert");
         local foundButtons = ExecuteRange_ButtonsResolver:GetValidButtons();
 
 		local glowShown = false;
         for id,button in pairs(foundButtons) do
 			local spellId = ExecuteRange_ButtonsResolver:GetButtonSpellId(button);
+			local _, globalCooldown = GetSpellCooldown(61304);
 			local start, duration = GetSpellCooldown(spellId);
-			if ExecuteRange_DB.profile.showOnCooldown or duration == 0 then -- spell is not on cooldown or is shown always
+			ExecuteRange_Console:Debug("info: GCD: " .. globalCooldown .. ", Spell duration: " .. duration);
+			if ExecuteRange_DB.profile.showOnCooldown or duration == 0 or globalCooldown >= duration  then -- spell is not on cooldown or is shown always
 				ActionButton_ShowOverlayGlow(button);
 				glowShown = true;
+				 ExecuteRange_Console:Debug(" =>   Glow shown");
 			end
         end
 
         --Show Spell Alert
         if ExecuteRange_DB.profile.showSpellAlert and glowShown  then
-            ExecuteRange_Console:Debug("showing alert");
+            ExecuteRange_Console:Debug(" =>   Showing alert");
             ExecuteRange_SpellAlertsHandler:ShowSpellAlert();
         end
 
     else
         -- Hide Glow
-        ExecuteRange_Console:Debug("will hide alert");
+        ExecuteRange_Console:Debug(" =>   Will hide alert");
         local foundButtons = ExecuteRange_ButtonsResolver:GetValidButtons();
         for id,button in pairs(foundButtons) do
             ActionButton_HideOverlayGlow(button);
@@ -54,15 +58,14 @@ end
     --Shows a Spell Alert Overlay appropriate to the logged in class
     --documentation for api call: SpellActivationOverlay_ShowOverlay(self, spellID, texturePath, position, scale, r, g, b, vFlip, hFlip)
 function ExecuteRange_SpellAlertsHandler:ShowSpellAlert()
-    ExecuteRange_Console:Debug("showing alert")
     for key, alert in pairs(ExecuteRange_DB.profile.alerts) do
-        ExecuteRange_Console:Debug("texture: " .. alert.texture);
-        ExecuteRange_Console:Debug("position: " .. alert.position);
-        ExecuteRange_Console:Debug("scale: " .. alert.scale);
-        ExecuteRange_Console:Debug("red: " .. alert.red);
-        ExecuteRange_Console:Debug("green: " .. alert.green);
-        ExecuteRange_Console:Debug("verticalFlip: " .. tostring(alert.verticalFlip));
-        ExecuteRange_Console:Debug("horizontalFlip: " .. tostring(alert.horizontalFlip));
+        --ExecuteRange_Console:Debug("texture: " .. alert.texture);
+        --ExecuteRange_Console:Debug("position: " .. alert.position);
+        --ExecuteRange_Console:Debug("scale: " .. alert.scale);
+        --ExecuteRange_Console:Debug("red: " .. alert.red);
+        --ExecuteRange_Console:Debug("green: " .. alert.green);
+        --ExecuteRange_Console:Debug("verticalFlip: " .. tostring(alert.verticalFlip));
+        --ExecuteRange_Console:Debug("horizontalFlip: " .. tostring(alert.horizontalFlip));
         SpellActivationOverlay_ShowOverlay(SpellActivationOverlayFrame, "EXECUTE_RANGE_OVERLAY", alert.texture, alert.position, alert.scale, alert.red, alert.green, alert.blue, alert.verticalFlip, alert.horizontalFlip);
     end
 end
