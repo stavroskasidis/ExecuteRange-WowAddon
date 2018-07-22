@@ -64,7 +64,17 @@ end
 function ExecuteRange_SpellAlertsHandler:HideSpellAlert()
     SpellActivationOverlay_HideOverlays(SpellActivationOverlayFrame, "EXECUTE_RANGE_OVERLAY");
 end
-    
+    	
+function ExecuteRange_SpellAlertsHandler:UnitHasBuff(unit, buffName)
+	for i=1,40 do
+	  local name = UnitBuff(unit,i)
+	  if name == buffName then
+		return true;
+	  end
+	end
+	return false;
+end
+
     --Gets the health percentage that execute procs depending on logged in class
 function ExecuteRange_SpellAlertsHandler:GetExecuteRange()
     ExecuteRange_Console:Debug("geting execute range")	
@@ -88,8 +98,7 @@ function ExecuteRange_SpellAlertsHandler:GetExecuteRange()
         --For Paladins we first check if spec is Retribution and Avenging Wrath is active. If not return the execute range
         if specName == "Retribution" then
             ExecuteRange_Console:Debug("pala is retri")
-            buffName = UnitBuff("player","Avenging Wrath"); 
-            if buffName ~=nill then -- if name is nil then "Avenging Wrath" is not active
+            if ExecuteRange_SpellAlertsHandler:UnitHasBuff("player","Avenging Wrath") then
                 ExecuteRange_Console:Debug("avenging wrath is active")
                 return 101;		--A execute range of 101 will always be higher than the target's life percentage, so the effect will be activated
             end
@@ -104,16 +113,14 @@ function ExecuteRange_SpellAlertsHandler:GetExecuteRange()
         end
     elseif ExecuteRange_Settings.CurrentClass == "WARRIOR" then
         --For Warriors we first check if Sudden Death proc is active. If not return the normal Execute range
-        buffName = UnitBuff("player","Sudden Death"); 
-        if buffName ~=nill then -- if name is nil then "Sudden Death" is not active
+        if ExecuteRange_SpellAlertsHandler:UnitHasBuff("player","Sudden Death") then
             return 101;		--A execute range of 101 will always be higher than the target's life percentage, so the effect will be activated
         else 
             return ExecuteRange_Constants.EXECUTE_RANGE;
         end
     elseif ExecuteRange_Settings.CurrentClass == "MONK" then  
     --Monk is a special case. The percentage is not fixed. If the buff "Death Note" is active you can cast Touch of Death.
-        buffName = UnitBuff("player","Death Note"); 
-        if buffName ~=nill then -- if name is nil then "Death Note" is not active
+        if ExecuteRange_SpellAlertsHandler:UnitHasBuff("player","Death Note") then -- if name is nil then "Death Note" is not active
             return 101;		--A execute range of 101 will always be higher than the target's life percentage, so the effect will be activated
         else 
             return 0;		--A execute range of 0 will always be lower than the target's life percentage, so the effect will NOT be activated

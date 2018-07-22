@@ -12,7 +12,6 @@ Console.lua
 Constants.lua
 Settings.lua
 ButtonsResolver.lua
-SettingsFormEvents.lua
 SpellAlertsHandler.lua
 Core.lua
 SettingsForm.xml

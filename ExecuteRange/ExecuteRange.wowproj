@@ -7,24 +7,48 @@
     <ProjectGuid>{b26d5a45-fe77-44b2-84a3-cbfa2fc61798}</ProjectGuid>
     <AssemblyName>ExecuteRange</AssemblyName>
     <RootNamespace>ExecuteRange</RootNamespace>
-    <WowPath>D:\Games\World Of Warcraft\</WowPath>
     <AddonTitle>ExecuteRange</AddonTitle>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Default' ">
     <OutputPath>.</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="ButtonsResolver.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Console.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Constants.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Core.lua">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="ExecuteRange.toc">
       <SubType>TableOfContents</SubType>
-    </Content>
-    <Content Include="ExecuteRange.lua">
-      <SubType>Code</SubType>
     </Content>
     <Content Include="embeds.xml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Settings.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="SettingsForm.lua">
+      <SubType>Code</SubType>
+      <DependentUpon>SettingsForm.xml</DependentUpon>
+    </Content>
+    <Content Include="SettingsForm.xml">
+      <SubType>Frame</SubType>
+    </Content>
+    <Content Include="SpellAlertsHandler.lua">
+      <SubType>Code</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Init.lua">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="Libs/LibStub/LibStub.lua">
       <SubType>Code</SubType>
     </Content>
