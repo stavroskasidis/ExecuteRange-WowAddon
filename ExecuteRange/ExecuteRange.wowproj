@@ -34,13 +34,6 @@
     <Content Include="Settings.lua">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="SettingsForm.lua">
-      <SubType>Code</SubType>
-      <DependentUpon>SettingsForm.xml</DependentUpon>
-    </Content>
-    <Content Include="SettingsForm.xml">
-      <SubType>Frame</SubType>
-    </Content>
     <Content Include="SpellAlertsHandler.lua">
       <SubType>Code</SubType>
     </Content>

@@ -14,4 +14,3 @@ Settings.lua
 ButtonsResolver.lua
 SpellAlertsHandler.lua
 Core.lua
-SettingsForm.xml
