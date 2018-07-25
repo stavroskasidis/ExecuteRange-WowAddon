@@ -8,12 +8,14 @@ function ExecuteRange_Core:OnInitialize()
     
 	local options = {};
 	local disableOnInit = false;
+	-- local classSupported = true;
 	if ExecuteRange_Settings.CurrentClass ~= "ROGUE" and ExecuteRange_Settings.CurrentClass ~="WARLOCK" and 
         ExecuteRange_Settings.CurrentClass ~= "PRIEST" and ExecuteRange_Settings.CurrentClass ~="DEATHKNIGHT" and 
 		ExecuteRange_Settings.CurrentClass ~="WARRIOR" and ExecuteRange_Settings.CurrentClass ~="PALADIN" then 
             ExecuteRange_Console:Print("'" .. localizedClass .. "' class is not supported");
 			options = ExecuteRange_Settings:GetClassNotSupportedOptionsTable();
             disableOnInit = true;
+			--classSupported = false;
 	else
 		ExecuteRange_Settings.CurrentSpell = ExecuteRange_Constants.VALID_SPELLS_NAMES_PER_CLASS[ExecuteRange_Settings.CurrentClass];
 		options = ExecuteRange_Settings:GetOptionsTable();
@@ -21,13 +23,32 @@ function ExecuteRange_Core:OnInitialize()
 	end
 
 	LibStub("AceConfig-3.0"):RegisterOptionsTable("ExecuteRange", options);
-	ExecuteRange_Core.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("ExecuteRange", "ExecuteRange");
+	ExecuteRange_Core.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("ExecuteRange", "Execute Range");
+	--if classSupported then 
+		-- Init options frame buttons
+	--	ExecuteRange_Core.optionsFrame.default = function()
+	--		ExecuteRange_Console:Debug("Settings form defaults");
+	--		ExecuteRange_DB:ResetProfile();
+	--		LibStub("AceConfigRegistry-3.0"):NotifyChange("ExecuteRange");
+	--	end
+
+	--	ExecuteRange_Core.optionsFrame.refresh = function()
+	--		ExecuteRange_Console:Debug("Settings form refresh");
+	--		ExecuteRange_Settings.PreviousOptions = ExecuteRange_Settings:CopyObject(ExecuteRange_DB.profile);
+--end;
+
+	--	ExecuteRange_Core.optionsFrame.cancel = function()
+	--		ExecuteRange_Console:Debug("Settings form cancel");
+	--		ExecuteRange_DB.profile = ExecuteRange_Settings.PreviousOptions;
+	--	end
+	--end
 	ExecuteRange_Core:RegisterChatCommand("exrange", "SlashCommandHandler", true);
 
 	if disableOnInit then
 		ExecuteRange_Core:Disable();
 	end
 end
+
 
 -- Called when the addon is enabled
 function ExecuteRange_Core:OnEnable()
@@ -39,9 +60,8 @@ function ExecuteRange_Core:OnEnable()
 	self:RegisterEvent("PLAYER_TARGET_CHANGED");
 
 	--Registers the UNIT_AURA event. This event is fired when a buff, debuff, status, or item bonus was gained by or faded from an entity (player, pet, NPC, or mob.) 
-	--Used to monitor Monk's Touch of Death, Warrior's Sudden Death and Retribution Paladin's  Avenging Wrath
-	if ExecuteRange_Settings.CurrentClass == "MONK" or ExecuteRange_Settings.CurrentClass == "WARRIOR" or
-       ExecuteRange_Settings.CurrentClass == "PALADIN" then
+	--Used to monitor Warrior's Sudden Death and Retribution Paladin's Avenging Wrath
+	if ExecuteRange_Settings.CurrentClass == "WARRIOR" or ExecuteRange_Settings.CurrentClass == "PALADIN" then
 		self:RegisterEvent("UNIT_AURA");
 	end
 
@@ -78,9 +98,7 @@ function ExecuteRange_Core:UNIT_AURA(eventName, arg1)
 end
 
 function ExecuteRange_Core:SlashCommandHandler(msg, editbox)
-	if msg == nil or msg == "" then
-		InterfaceOptionsFrame_OpenToCategory(self.optionsFrame);
-	elseif msg == "debug" then
+	if msg == "debug" then
 		if ExecuteRange_Settings.IsDebugEnabled then
 			ExecuteRange_Console:Print("Debug Disabled");
 			ExecuteRange_Settings.IsDebugEnabled = false;
@@ -88,5 +106,7 @@ function ExecuteRange_Core:SlashCommandHandler(msg, editbox)
 			ExecuteRange_Console:Print("Debug Enabled");
 			ExecuteRange_Settings.IsDebugEnabled = true;
 		end
+	else
+		InterfaceOptionsFrame_OpenToCategory(self.optionsFrame);
 	end
 end

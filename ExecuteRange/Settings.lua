@@ -1,6 +1,8 @@
 ﻿ExecuteRange_Settings.CurrentClass = '';
 ExecuteRange_Settings.CurrentSpell = '';
 ExecuteRange_Settings.IsDebugEnabled = false;
+--ExecuteRange_Settings.PreviousOptions = nil;
+local previewTimerHandle = nil;
 
 function ExecuteRange_Settings:GetDefaults(playerClass) 
     local defaultAlerts = {};
@@ -131,7 +133,7 @@ end
 
 function ExecuteRange_Settings:GetOptionsTable()
 	-- doc: https://www.wowace.com/projects/ace3/pages/ace-config-3-0-options-tables
-
+	
 	local options = {
 		name = "ExecuteRange (Skill: " .. ExecuteRange_Settings.CurrentSpell .. ")",
 		type = 'group',
@@ -184,12 +186,15 @@ function ExecuteRange_Settings:GetOptionsTable()
 				name = "Preview",
 				desc = "Shows the alert",
 				func = function()
-					ExecuteRange_Core:CancelAllTimers();
-					ExecuteRange_SpellAlertsHandler:HideSpellAlert();
-					ExecuteRange_Core:ScheduleTimer(function()
-						ExecuteRange_SpellAlertsHandler:HideSpellAlert();
-					end,5);
-					ExecuteRange_SpellAlertsHandler:ShowSpellAlert();
+					if previewTimerHandle ~= nil then
+						ExecuteRange_Core:CancelTimer(previewTimerHandle);
+					end
+					ExecuteRange_SpellAlertsHandler:HideSpellAlert("EXECUTE_RANGE_OVERLAY_PREVIEW");
+					previewTimerHandle = ExecuteRange_Core:ScheduleTimer(function()
+						ExecuteRange_SpellAlertsHandler:HideSpellAlert("EXECUTE_RANGE_OVERLAY_PREVIEW");
+						previewTimerHandle = nil;
+					end,8);
+					ExecuteRange_SpellAlertsHandler:ShowSpellAlert("EXECUTE_RANGE_OVERLAY_PREVIEW");
 				end,
 				width = "half",
 				order = 4
@@ -365,3 +370,13 @@ function ExecuteRange_Settings:GetAlertByPosition(position)
     end
     return nil;
 end
+
+-- function ExecuteRange_Settings:CopyObject(obj, seen)
+-- 	if type(obj) ~= 'table' then return obj end
+-- 	if seen and seen[obj] then return seen[obj] end
+-- 	local s = seen or {}
+-- 	local res = setmetatable({}, getmetatable(obj))
+-- 	s[obj] = res
+-- 	for k, v in pairs(obj) do res[ExecuteRange_Settings:CopyObject(k, s)] = ExecuteRange_Settings:CopyObject(v, s) end
+-- 	return res
+-- end
