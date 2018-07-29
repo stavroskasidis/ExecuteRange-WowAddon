@@ -16,34 +16,37 @@ function ExecuteRange_SpellAlertsHandler:ShowOrHideFlasher()
     --ExecuteRange_Console:Debug("info: maxHealth: " .. maxHealth);
     --ExecuteRange_Console:Debug("info: health: " .. health);
     --ExecuteRange_Console:Debug("info: executeRange: " .. executeRange);	
-    if percentage <= executeRange and not UnitIsDead("target") and UnitCanAttack("player","target") then 
-        -- Show Glow
-        -- ExecuteRange_Console:Debug(" =>   Will show alert");
-        local foundButtons = ExecuteRange_ButtonsResolver:GetValidButtons();
+    local foundButtons = ExecuteRange_ButtonsResolver:GetValidButtons();
+	local skillAvailable = false;
+    for id,button in pairs(foundButtons) do
+		local spellId = ExecuteRange_ButtonsResolver:GetButtonSpellId(button);
+		local _, globalCooldown = GetSpellCooldown(61304);
+		local start, duration = GetSpellCooldown(spellId);
+		-- ExecuteRange_Console:Debug("info: GCD: " .. globalCooldown .. ", Spell duration: " .. duration);
+		if ExecuteRange_DB.profile.showOnCooldown or duration == 0 or globalCooldown >= duration  then -- spell is not on cooldown or is shown always
+			skillAvailable = true;
+		end
+		break;
+    end
 
-		local glowShown = false;
+    if percentage <= executeRange and not UnitIsDead("target") and UnitCanAttack("player","target") and skillAvailable then 
+--        -- Show Glow
+--        -- ExecuteRange_Console:Debug(" =>   Will show alert");
+--        local foundButtons = ExecuteRange_ButtonsResolver:GetValidButtons();
+
         for id,button in pairs(foundButtons) do
-			local spellId = ExecuteRange_ButtonsResolver:GetButtonSpellId(button);
-			local _, globalCooldown = GetSpellCooldown(61304);
-			local start, duration = GetSpellCooldown(spellId);
-			-- ExecuteRange_Console:Debug("info: GCD: " .. globalCooldown .. ", Spell duration: " .. duration);
-			if ExecuteRange_DB.profile.showOnCooldown or duration == 0 or globalCooldown >= duration  then -- spell is not on cooldown or is shown always
-				ActionButton_ShowOverlayGlow(button);
-				glowShown = true;
-				-- ExecuteRange_Console:Debug(" =>   Glow shown");
-			end
+            ActionButton_ShowOverlayGlow(button);
         end
 
         --Show Spell Alert
-        if ExecuteRange_DB.profile.showSpellAlert and glowShown  then
-            -- ExecuteRange_Console:Debug(" =>   Showing alert");
+        if ExecuteRange_DB.profile.showSpellAlert and table.getn(foundButtons) > 0  then
+            ExecuteRange_Console:Debug("showing alert");
             ExecuteRange_SpellAlertsHandler:ShowSpellAlert("EXECUTE_RANGE_OVERLAY");
         end
 
     else
         -- Hide Glow
         -- ExecuteRange_Console:Debug(" =>   Will hide alert");
-        local foundButtons = ExecuteRange_ButtonsResolver:GetValidButtons();
         for id,button in pairs(foundButtons) do
             ActionButton_HideOverlayGlow(button);
         end
