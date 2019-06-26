@@ -1,7 +1,7 @@
 ## Interface: 80200
 ## Title: Execute Range
 ## Author: Akira GTX
-## Version: 2.2
+## Version: 2.3
 ## Notes: Dsplays a button glow and an optional spell alert when the target is within "Execute" range.|n|n|cFFFFFF00Class-Spells Supported:|r|nRogue - Blindside |nWarlock - Drain Soul |nPriest - Shadow Word: Death |nDeath Knight - Soul Reaper |nWarrior - Execute |nPaladin - Hammer of Wrath
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
