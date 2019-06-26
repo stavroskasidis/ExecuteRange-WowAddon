@@ -8,7 +8,7 @@ function ExecuteRange_Settings:GetDefaults(playerClass)
     local defaultAlerts = {};
     if playerClass == "ROGUE" then
         local alert1 = {
-            texture = "TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DEATH.BLP",
+            texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DEATH.BLP"],
             position = "RIGHT",
             scale = 1,
             red = 255,
@@ -18,7 +18,7 @@ function ExecuteRange_Settings:GetDefaults(playerClass)
             horizontalFlip = true;
         };
         local alert2 = {
-            texture = "TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DEATH.BLP",
+            texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DEATH.BLP"],
             position = "LEFT",
             scale = 1,
             red = 255,
@@ -31,7 +31,7 @@ function ExecuteRange_Settings:GetDefaults(playerClass)
         table.insert(defaultAlerts,alert2);
     elseif playerClass == "WARLOCK" then
         local alert1 = {
-            texture = "TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DOOM.BLP",
+            texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DOOM.BLP"],
             position = "RIGHT",
             scale = 1,
             red = 255,
@@ -41,7 +41,7 @@ function ExecuteRange_Settings:GetDefaults(playerClass)
             horizontalFlip = true;
         };
         local alert2 = {
-            texture = "TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DOOM.BLP",
+            texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DOOM.BLP"],
             position = "LEFT",
             scale = 1,
             red = 255,
@@ -54,7 +54,7 @@ function ExecuteRange_Settings:GetDefaults(playerClass)
         table.insert(defaultAlerts,alert2);
     elseif playerClass == "PRIEST" then
         local alert1 = {
-            texture = "TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DOOM.BLP",
+            texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DOOM.BLP"],
             position = "RIGHT",
             scale = 1,
             red = 255,
@@ -64,7 +64,7 @@ function ExecuteRange_Settings:GetDefaults(playerClass)
             horizontalFlip = true;
         };
         local alert2 = {
-            texture = "TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DOOM.BLP",
+            texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DOOM.BLP"],
             position = "LEFT",
             scale = 1,
             red = 255,
@@ -77,7 +77,7 @@ function ExecuteRange_Settings:GetDefaults(playerClass)
         table.insert(defaultAlerts,alert2);
     elseif playerClass == "DEATHKNIGHT" then
         local alert1 = {
-            texture = "TEXTURES\\SPELLACTIVATIONOVERLAYS\\NECROPOLIS.BLP",
+            texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\NECROPOLIS.BLP"],
             position = "TOP",
             scale = 1,
             red = 255,
@@ -89,7 +89,7 @@ function ExecuteRange_Settings:GetDefaults(playerClass)
         table.insert(defaultAlerts,alert1);
     elseif playerClass == "PALADIN" then
         local alert1 = {
-            texture = "TEXTURES\\SPELLACTIVATIONOVERLAYS\\PREDATORY_SWIFTNESS.BLP",
+            texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\PREDATORY_SWIFTNESS.BLP"],
             position = "TOP",
             scale = 1,
             red = 255,
@@ -101,7 +101,7 @@ function ExecuteRange_Settings:GetDefaults(playerClass)
         table.insert(defaultAlerts,alert1);
     elseif playerClass == "WARRIOR" then
         local alert1 = {
-            texture = "TEXTURES\\SPELLACTIVATIONOVERLAYS\\ULTIMATUM.BLP",
+            texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\ULTIMATUM.BLP"],
             position = "TOP",
             scale = 1,
             red = 255,
@@ -223,7 +223,7 @@ function ExecuteRange_Settings:GetOptionsTable()
 				set = function(info, position, state)
 					if state then
 						local newAlert = {
-							texture = "TEXTURES\\SPELLACTIVATIONOVERLAYS\\GENERICTOP_01.BLP",
+							texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\GENERICTOP_01.BLP"],
 							position = position,
 							scale = 1,
 							red = 255,

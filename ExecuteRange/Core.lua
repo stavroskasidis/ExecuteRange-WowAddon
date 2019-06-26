@@ -6,6 +6,19 @@ function ExecuteRange_Core:OnInitialize()
     
 	ExecuteRange_DB = LibStub("AceDB-3.0"):New("ExecuteRangeDB",ExecuteRange_Settings:GetDefaults(englishClass))
     
+
+	for key, alert in pairs(ExecuteRange_DB.profile.alerts) do
+		-- backwards compat fix for saved settings before 8.2
+		-- https://wow.gamepedia.com/Patch_8.2.0/API_changes
+
+		-- "No files outside of Interface\ can be addressed by file path anymore"
+
+		if type(alert.texture) == "string" then
+			-- Convert filepath to id
+			alert.texture = ExecuteRange_Constants.TEXTURE_FILE_IDS[alert.texture]
+		end
+    end
+
 	local options = {};
 	local disableOnInit = false;
 	-- local classSupported = true;
@@ -47,8 +60,27 @@ function ExecuteRange_Core:OnInitialize()
 	if disableOnInit then
 		ExecuteRange_Core:Disable();
 	end
+
+	
+	-- for i, button in pairs(ActionBarButtonEventsFrame.frames) do 
+	-- 	 print(ExecuteRange_Core:dump(button,0)); 
+	-- 	-- ActionButton_ShowOverlayGlow(button);
+	-- 	break;
+	-- end
 end
 
+function ExecuteRange_Core:dump(o, depth)
+	if type(o) == 'table' and depth < 1 then
+		local s = '{ '
+		for k,v in pairs(o) do
+			if type(k) ~= 'number' then k = '"'..k..'"' end
+			s = s .. '['..k..'] = ' .. ExecuteRange_Core:dump(v,depth + 1) .. ','
+		end
+		return s .. '} '
+	else
+		return tostring(o)
+	end
+end
 
 -- Called when the addon is enabled
 function ExecuteRange_Core:OnEnable()

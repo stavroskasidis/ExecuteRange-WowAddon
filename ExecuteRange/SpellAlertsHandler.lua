@@ -61,14 +61,15 @@ end
     --Shows a Spell Alert Overlay appropriate to the logged in class
     --documentation for api call: SpellActivationOverlay_ShowOverlay(self, spellID, texturePath, position, scale, r, g, b, vFlip, hFlip)
 function ExecuteRange_SpellAlertsHandler:ShowSpellAlert(id)
+    -- ExecuteRange_Console:Debug("show spell alert");
     for key, alert in pairs(ExecuteRange_DB.profile.alerts) do
-        --ExecuteRange_Console:Debug("texture: " .. alert.texture);
-        --ExecuteRange_Console:Debug("position: " .. alert.position);
-        --ExecuteRange_Console:Debug("scale: " .. alert.scale);
-        --ExecuteRange_Console:Debug("red: " .. alert.red);
-        --ExecuteRange_Console:Debug("green: " .. alert.green);
-        --ExecuteRange_Console:Debug("verticalFlip: " .. tostring(alert.verticalFlip));
-        --ExecuteRange_Console:Debug("horizontalFlip: " .. tostring(alert.horizontalFlip));
+        -- ExecuteRange_Console:Debug("texture: " .. alert.texture);
+        -- ExecuteRange_Console:Debug("position: " .. alert.position);
+        -- ExecuteRange_Console:Debug("scale: " .. alert.scale);
+        -- ExecuteRange_Console:Debug("red: " .. alert.red);
+        -- ExecuteRange_Console:Debug("green: " .. alert.green);
+        -- ExecuteRange_Console:Debug("verticalFlip: " .. tostring(alert.verticalFlip));
+        -- ExecuteRange_Console:Debug("horizontalFlip: " .. tostring(alert.horizontalFlip));
         SpellActivationOverlay_ShowOverlay(SpellActivationOverlayFrame, id, alert.texture, alert.position, alert.scale, alert.red, alert.green, alert.blue, alert.verticalFlip, alert.horizontalFlip);
     end
 end
