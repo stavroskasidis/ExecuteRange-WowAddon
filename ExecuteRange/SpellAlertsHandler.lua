@@ -104,7 +104,7 @@ function ExecuteRange_SpellAlertsHandler:GetExecuteRange()
     elseif ExecuteRange_Settings.CurrentClass == "DEATHKNIGHT" then
         return ExecuteRange_Constants.SOUL_REAPER_EXECUTE_RANGE;
     elseif ExecuteRange_Settings.CurrentClass == "PALADIN" then
-        if ExecuteRange_SpellAlertsHandler:UnitHasBuff("player","Avenging Wrath") then
+        if ExecuteRange_SpellAlertsHandler:UnitHasBuff("player","Avenging Wrath") and UnitLevel("player") >= 58 then
             -- ExecuteRange_Console:Debug("avenging wrath is active")
             return 101;		--An execute range of 101 will always be higher than the target's life percentage, so the effect will be activated
         end
