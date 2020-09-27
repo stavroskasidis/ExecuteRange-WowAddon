@@ -7,3 +7,4 @@ ExecuteRange_SpellAlertsHandler = {};
 ExecuteRange_ButtonsResolver = {};
 ExecuteRange_SlashCommandHandler = {};
 ExecuteRange_Settings = {};
+ExecuteRange_SpellActivationOverlay = {};

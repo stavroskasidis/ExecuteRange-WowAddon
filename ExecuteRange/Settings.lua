@@ -100,12 +100,6 @@ function ExecuteRange_Settings:GetDefaults(playerClass)
             horizontalFlip = false;
         };
         table.insert(defaultAlerts,alert1);
-        --local id, specName, description, icon, background,role=GetSpecializationInfo(GetSpecialization());
-        --if specName == "Protection" then --if protection spec'ed, show alert on bottom.
-        --    SpellActivationOverlay_ShowOverlay(SpellActivationOverlayFrame, "EXECUTE_RANGE_OVERLAY", "TEXTURES\\SPELLACTIVATIONOVERLAYS\\ULTIMATUM.BLP", "BOTTOM", 1, 255, 255,255, true, false);
-        --else
-        --    SpellActivationOverlay_ShowOverlay(SpellActivationOverlayFrame, "EXECUTE_RANGE_OVERLAY", "TEXTURES\\SPELLACTIVATIONOVERLAYS\\ULTIMATUM.BLP", "TOP", 1, 255, 255,255, false, false);
-        --end
     end
     
     local defaults = {

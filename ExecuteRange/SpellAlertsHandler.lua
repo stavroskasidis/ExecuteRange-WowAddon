@@ -74,13 +74,18 @@ function ExecuteRange_SpellAlertsHandler:ShowSpellAlert(id)
         -- ExecuteRange_Console:Debug("green: " .. alert.green);
         -- ExecuteRange_Console:Debug("verticalFlip: " .. tostring(alert.verticalFlip));
         -- ExecuteRange_Console:Debug("horizontalFlip: " .. tostring(alert.horizontalFlip));
-        SpellActivationOverlay_ShowOverlay(SpellActivationOverlayFrame, id, alert.texture, alert.position, alert.scale, alert.red, alert.green, alert.blue, alert.verticalFlip, alert.horizontalFlip);
+
+        -- Using custom implementation instead of defalt (restore after/if bug is fixed):
+        -- SpellActivationOverlay_ShowOverlay(SpellActivationOverlayFrame, id, alert.texture, alert.position, alert.scale, alert.red, alert.green, alert.blue, alert.verticalFlip, alert.horizontalFlip);
+        ExecuteRange_SpellActivationOverlay:SpellActivationOverlay_ShowOverlay(ExecuteRangeSpellActivationOverlayFrame, id, alert.texture, alert.position, alert.scale, alert.red, alert.green, alert.blue, alert.verticalFlip, alert.horizontalFlip);
     end
 end
     
 function ExecuteRange_SpellAlertsHandler:HideSpellAlert(id)
     ExecuteRange_Console:Debug("Hiding spell alert");
-    SpellActivationOverlay_HideOverlays(SpellActivationOverlayFrame, id);
+    -- Using custom implementation instead of defalt (restore after/if bug is fixed):
+    -- SpellActivationOverlay_HideOverlays(SpellActivationOverlayFrame, id);
+    ExecuteRange_SpellActivationOverlay:SpellActivationOverlay_HideOverlays(ExecuteRangeSpellActivationOverlayFrame, id);
 end
     	
 function ExecuteRange_SpellAlertsHandler:UnitHasBuff(unit, buffName)
