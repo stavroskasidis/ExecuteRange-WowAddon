@@ -180,6 +180,7 @@ function ExecuteRange_Settings:GetOptionsTable()
 					end
 					ExecuteRange_SpellAlertsHandler:HideSpellAlert(ExecuteRange_Constants.OVERLAY_PREVIEW_ID);
 					previewTimerHandle = ExecuteRange_Core:ScheduleTimer(function()
+						ExecuteRange_Console:Debug("Hiding preview overlay");
 						ExecuteRange_SpellAlertsHandler:HideSpellAlert(ExecuteRange_Constants.OVERLAY_PREVIEW_ID);
 						previewTimerHandle = nil;
 					end,8);

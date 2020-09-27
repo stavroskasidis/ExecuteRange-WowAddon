@@ -97,6 +97,7 @@ function ExecuteRange_Core:OnEnable()
 		self:RegisterEvent("UNIT_AURA");
 	end
 
+	-- self:RegisterEvent("SPELL_ACTIVATION_OVERLAY_HIDE");
 end
 
 -- Called when the addon is disabled
@@ -127,6 +128,10 @@ function ExecuteRange_Core:UNIT_AURA(eventName, arg1)
 	if arg1 == "player" then
 		ExecuteRange_SpellAlertsHandler:ShowOrHideFlasher();
 	end
+end
+
+function ExecuteRange_Core:SPELL_ACTIVATION_OVERLAY_HIDE(eventName, arg1, arg2, arg3)
+	ExecuteRange_Console:Debug("Hide overlay event, arg1: ", arg1);
 end
 
 function ExecuteRange_Core:SlashCommandHandler(msg, editbox)

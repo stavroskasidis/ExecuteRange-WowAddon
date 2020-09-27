@@ -79,6 +79,7 @@ function ExecuteRange_SpellAlertsHandler:ShowSpellAlert(id)
 end
     
 function ExecuteRange_SpellAlertsHandler:HideSpellAlert(id)
+    ExecuteRange_Console:Debug("Hiding spell alert");
     SpellActivationOverlay_HideOverlays(SpellActivationOverlayFrame, id);
 end
     	
