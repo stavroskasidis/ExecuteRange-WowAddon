@@ -1,7 +1,5 @@
 # ExecuteRange - WowAddon
-https://www.curseforge.com/wow/addons/dispatch-flasher
-
-https://wow.curseforge.com/projects/dispatch-flasher
+https://www.curseforge.com/wow/addons/execute-range
 
 ## General
 Dsplays a button glow and an optional spell alert when the target is within "Execute" range.
