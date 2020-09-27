@@ -11,7 +11,10 @@
 	["DRAIN_SOUL_ID"]=198590,
 	["SHADOWBURN_ID"]=17877,
 
-	["SOUL_REAPER_ID"]=130736
+	["SOUL_REAPER_ID"]=130736,
+
+	["KILL_SHOT_ID"]=53351,
+	["KILL_SHOT_SURVIVAL_ID"]=320976
 };
 
 ExecuteRange_Constants.VALID_SPELLS_NAMES_PER_CLASS = {
@@ -20,6 +23,7 @@ ExecuteRange_Constants.VALID_SPELLS_NAMES_PER_CLASS = {
 	["DEATHKNIGHT"]="Soul Reaper",
 	["WARRIOR"]="Execute",
 	["PALADIN"]="Hammer of Wrath",
+	["HUNTER"]="Kill Shot",
 };
 
 ExecuteRange_Constants.DRAIN_SOUL_EXECUTE_RANGE = 20;
@@ -29,6 +33,7 @@ ExecuteRange_Constants.EXECUTE_RANGE = 20;
 ExecuteRange_Constants.EXECUTE_RANGE_MASSACRE = 35;
 ExecuteRange_Constants.SOUL_REAPER_EXECUTE_RANGE = 35;
 ExecuteRange_Constants.HAMMER_OF_WRATH_EXECUTE_RANGE = 20;
+ExecuteRange_Constants.KILL_SHOT_EXECUTE_RANGE = 20;
 
 ExecuteRange_Constants.TEXTURE_FILE_IDS = {
 	["TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DEATH.BLP"] = 449493,

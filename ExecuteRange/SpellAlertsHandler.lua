@@ -95,7 +95,9 @@ end
     --Gets the health percentage that execute procs depending on logged in class
 function ExecuteRange_SpellAlertsHandler:GetExecuteRange()
     -- ExecuteRange_Console:Debug("geting execute range")	
-    if ExecuteRange_Settings.CurrentClass == "WARLOCK" then
+    if ExecuteRange_Settings.CurrentClass == "HUNTER" then
+        return ExecuteRange_Constants.KILL_SHOT_EXECUTE_RANGE;
+    elseif ExecuteRange_Settings.CurrentClass == "WARLOCK" then
         
         local id, specName = GetSpecializationInfo(GetSpecialization());
         if specName == "Destruction" then

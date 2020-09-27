@@ -5,8 +5,20 @@ ExecuteRange_Settings.IsDebugEnabled = false;
 local previewTimerHandle = nil;
 
 function ExecuteRange_Settings:GetDefaults(playerClass) 
-    local defaultAlerts = {};
-    if playerClass == "WARLOCK" then
+	local defaultAlerts = {};
+	if playerClass == "HUNTER" then
+		local alert1 = {
+            texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\MASTER_MARKSMAN.BLP"],
+            position = "TOP",
+            scale = 1.5,
+            red = 255,
+            green = 255,
+            blue = 255,
+            verticalFlip = false,
+            horizontalFlip = false;
+        };
+        table.insert(defaultAlerts,alert1);
+	elseif playerClass == "WARLOCK" then
         local alert1 = {
             texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DOOM.BLP"],
             position = "RIGHT",

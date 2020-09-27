@@ -2,7 +2,7 @@
 ## Title: Execute Range
 ## Author: Akira GTX
 ## Version: 2.4
-## Notes: Dsplays a button glow and an optional spell alert when the target is within "Execute" range.|n|n|cFFFFFF00Class-Spells Supported:|r|nWarlock - Drain Soul / Shadowburn |nPriest - Shadow Word: Death |nDeath Knight - Soul Reaper |nWarrior - Execute |nPaladin - Hammer of Wrath
+## Notes: Dsplays a button glow and an optional spell alert when the target is within "Execute" range.|n|n|cFFFFFF00Class-Spells Supported:|r|nWarlock - Drain Soul / Shadowburn |nPriest - Shadow Word: Death |nDeath Knight - Soul Reaper |nWarrior - Execute |nPaladin - Hammer of Wrath |nHunter - Kill Shot
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 ## SavedVariables: ExecuteRangeDB

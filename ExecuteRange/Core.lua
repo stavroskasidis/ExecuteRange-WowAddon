@@ -22,7 +22,7 @@ function ExecuteRange_Core:OnInitialize()
 	local options = {};
 	local disableOnInit = false;
 	-- local classSupported = true;
-	if  ExecuteRange_Settings.CurrentClass ~="WARLOCK" and 
+	if  ExecuteRange_Settings.CurrentClass ~="WARLOCK" and ExecuteRange_Settings.CurrentClass ~="HUNTER" and
         ExecuteRange_Settings.CurrentClass ~= "PRIEST" and ExecuteRange_Settings.CurrentClass ~="DEATHKNIGHT" and 
 		ExecuteRange_Settings.CurrentClass ~="WARRIOR" and ExecuteRange_Settings.CurrentClass ~="PALADIN" then 
             ExecuteRange_Console:Print("'" .. localizedClass .. "' class is not supported");
