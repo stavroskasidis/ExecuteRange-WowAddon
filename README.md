@@ -7,7 +7,6 @@ https://wow.curseforge.com/projects/dispatch-flasher
 Dsplays a button glow and an optional spell alert when the target is within "Execute" range.
 
 ## Classes - Spells Supported
-* Rogue - Blindside
 * Warlock - Drain Soul / Shadowburn
 * Priest - Shadow Word:Death
 * Death Knight - Soul Reaper

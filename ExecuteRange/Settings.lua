@@ -6,30 +6,7 @@ local previewTimerHandle = nil;
 
 function ExecuteRange_Settings:GetDefaults(playerClass) 
     local defaultAlerts = {};
-    if playerClass == "ROGUE" then
-        local alert1 = {
-            texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DEATH.BLP"],
-            position = "RIGHT",
-            scale = 1,
-            red = 255,
-            green = 255,
-            blue = 255,
-            verticalFlip = false,
-            horizontalFlip = true;
-        };
-        local alert2 = {
-            texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DEATH.BLP"],
-            position = "LEFT",
-            scale = 1,
-            red = 255,
-            green = 255,
-            blue = 255,
-            verticalFlip = false,
-            horizontalFlip = false;
-        };
-        table.insert(defaultAlerts,alert1);
-        table.insert(defaultAlerts,alert2);
-    elseif playerClass == "WARLOCK" then
+    if playerClass == "WARLOCK" then
         local alert1 = {
             texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DOOM.BLP"],
             position = "RIGHT",

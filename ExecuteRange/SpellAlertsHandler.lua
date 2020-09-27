@@ -95,9 +95,7 @@ end
     --Gets the health percentage that execute procs depending on logged in class
 function ExecuteRange_SpellAlertsHandler:GetExecuteRange()
     -- ExecuteRange_Console:Debug("geting execute range")	
-    if ExecuteRange_Settings.CurrentClass == "ROGUE" then
-        return ExecuteRange_Constants.BLINDSIDE_EXECUTE_RANGE;
-    elseif ExecuteRange_Settings.CurrentClass == "WARLOCK" then
+    if ExecuteRange_Settings.CurrentClass == "WARLOCK" then
         
         local id, specName = GetSpecializationInfo(GetSpecialization());
         if specName == "Destruction" then
