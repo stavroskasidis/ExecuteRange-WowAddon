@@ -178,12 +178,12 @@ function ExecuteRange_Settings:GetOptionsTable()
 					if previewTimerHandle ~= nil then
 						ExecuteRange_Core:CancelTimer(previewTimerHandle);
 					end
-					ExecuteRange_SpellAlertsHandler:HideSpellAlert("EXECUTE_RANGE_OVERLAY_PREVIEW");
+					ExecuteRange_SpellAlertsHandler:HideSpellAlert(ExecuteRange_Constants.OVERLAY_PREVIEW_ID);
 					previewTimerHandle = ExecuteRange_Core:ScheduleTimer(function()
-						ExecuteRange_SpellAlertsHandler:HideSpellAlert("EXECUTE_RANGE_OVERLAY_PREVIEW");
+						ExecuteRange_SpellAlertsHandler:HideSpellAlert(ExecuteRange_Constants.OVERLAY_PREVIEW_ID);
 						previewTimerHandle = nil;
 					end,8);
-					ExecuteRange_SpellAlertsHandler:ShowSpellAlert("EXECUTE_RANGE_OVERLAY_PREVIEW");
+					ExecuteRange_SpellAlertsHandler:ShowSpellAlert(ExecuteRange_Constants.OVERLAY_PREVIEW_ID);
 				end,
 				width = "half",
 				order = 4

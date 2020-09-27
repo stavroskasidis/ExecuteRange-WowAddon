@@ -45,7 +45,7 @@ function ExecuteRange_SpellAlertsHandler:ShowOrHideFlasher()
         --Show Spell Alert
         if ExecuteRange_DB.profile.showSpellAlert and table.getn(foundButtons) > 0  then
             ExecuteRange_Console:Debug("showing alert");
-            ExecuteRange_SpellAlertsHandler:ShowSpellAlert("EXECUTE_RANGE_OVERLAY");
+            ExecuteRange_SpellAlertsHandler:ShowSpellAlert(ExecuteRange_Constants.OVERLAY_ID);
         end
 
     else
@@ -57,7 +57,7 @@ function ExecuteRange_SpellAlertsHandler:ShowOrHideFlasher()
 
         --Hide Spell Alert
         if ExecuteRange_DB.profile.showSpellAlert then
-            ExecuteRange_SpellAlertsHandler:HideSpellAlert("EXECUTE_RANGE_OVERLAY");
+            ExecuteRange_SpellAlertsHandler:HideSpellAlert(ExecuteRange_Constants.OVERLAY_ID);
         end 
     end
 end

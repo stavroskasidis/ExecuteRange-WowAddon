@@ -17,6 +17,9 @@
 	["KILL_SHOT_SURVIVAL_ID"]=320976
 };
 
+ExecuteRange_Constants.OVERLAY_ID = 9999999;
+ExecuteRange_Constants.OVERLAY_PREVIEW_ID = 9999998;
+
 ExecuteRange_Constants.VALID_SPELLS_NAMES_PER_CLASS = {
 	["WARLOCK"]="Drain Soul/Shadowburn",
 	["PRIEST"]="Shadow Word: Death",
