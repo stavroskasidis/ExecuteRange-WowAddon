@@ -28,9 +28,9 @@
 -- end
 -- @class file
 -- @name AceAddon-3.0.lua
--- @release $Id: AceAddon-3.0.lua 980 2010-10-27 14:20:11Z nevcairiel $
+-- @release $Id: AceAddon-3.0.lua 1238 2020-08-28 16:18:42Z nevcairiel $
 
-local MAJOR, MINOR = "AceAddon-3.0", 10
+local MAJOR, MINOR = "AceAddon-3.0", 13
 local AceAddon, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not AceAddon then return end -- No Upgrade needed.
@@ -62,43 +62,12 @@ local function errorhandler(err)
 	return geterrorhandler()(err)
 end
 
-local function CreateDispatcher(argCount)
-	local code = [[
-		local xpcall, eh = ...
-		local method, ARGS
-		local function call() return method(ARGS) end
-
-		local function dispatch(func, ...)
-			 method = func
-			 if not method then return end
-			 ARGS = ...
-			 return xpcall(call, eh)
-		end
-
-		return dispatch
-	]]
-
-	local ARGS = {}
-	for i = 1, argCount do ARGS[i] = "arg"..i end
-	code = code:gsub("ARGS", tconcat(ARGS, ", "))
-	return assert(loadstring(code, "safecall Dispatcher["..argCount.."]"))(xpcall, errorhandler)
-end
-
-local Dispatchers = setmetatable({}, {__index=function(self, argCount)
-	local dispatcher = CreateDispatcher(argCount)
-	rawset(self, argCount, dispatcher)
-	return dispatcher
-end})
-Dispatchers[0] = function(func)
-	return xpcall(func, errorhandler)
-end
-
 local function safecall(func, ...)
 	-- we check to see if the func is passed is actually a function here and don't error when it isn't
 	-- this safecall is used for optional functions like OnInitialize OnEnable etc. When they are not
 	-- present execution should continue without hinderance
 	if type(func) == "function" then
-		return Dispatchers[select('#', ...)](func, ...)
+		return xpcall(func, errorhandler, ...)
 	end
 end
 
@@ -107,6 +76,16 @@ local Enable, Disable, EnableModule, DisableModule, Embed, NewModule, GetModule,
 
 -- used in the addon metatable
 local function addontostring( self ) return self.name end
+
+-- Check if the addon is queued for initialization
+local function queuedForInitialization(addon)
+	for i = 1, #AceAddon.initializequeue do
+		if AceAddon.initializequeue[i] == addon then
+			return true
+		end
+	end
+	return false
+end
 
 --- Create a new AceAddon-3.0 addon.
 -- Any libraries you specified will be embeded, and the addon will be scheduled for
@@ -314,7 +293,12 @@ end
 -- MyModule:Enable()
 function Enable(self)
 	self:SetEnabledState(true)
-	return AceAddon:EnableAddon(self)
+
+	-- nevcairiel 2013-04-27: don't enable an addon/module if its queued for init still
+	-- it'll be enabled after the init process
+	if not queuedForInitialization(self) then
+		return AceAddon:EnableAddon(self)
+	end
 end
 
 --- Disables the Addon, if possible, return true or false depending on success.
@@ -617,9 +601,20 @@ function AceAddon:IterateAddonStatus() return pairs(self.statuses) end
 function AceAddon:IterateEmbedsOnAddon(addon) return pairs(self.embeds[addon]) end
 function AceAddon:IterateModulesOfAddon(addon) return pairs(addon.modules) end
 
+-- Blizzard AddOns which can load very early in the loading process and mess with Ace3 addon loading
+local BlizzardEarlyLoadAddons = {
+	Blizzard_DebugTools = true,
+	Blizzard_TimeManager = true,
+	Blizzard_BattlefieldMap = true,
+	Blizzard_MapCanvas = true,
+	Blizzard_SharedMapDataProviders = true,
+	Blizzard_CombatLog = true,
+}
+
 -- Event Handling
 local function onEvent(this, event, arg1)
-	if event == "ADDON_LOADED" or event == "PLAYER_LOGIN" then
+	-- 2020-08-28 nevcairiel - ignore the load event of Blizzard addons which occur early in the loading process
+	if (event == "ADDON_LOADED"  and (arg1 == nil or not BlizzardEarlyLoadAddons[arg1])) or event == "PLAYER_LOGIN" then
 		-- if a addon loads another addon, recursion could happen here, so we need to validate the table on every iteration
 		while(#AceAddon.initializequeue > 0) do
 			local addon = tremove(AceAddon.initializequeue, 1)
