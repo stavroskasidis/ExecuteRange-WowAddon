@@ -7,7 +7,8 @@
 
     ["EXECUTE_FURY_ID"]=5308,
 	["EXECUTE_FURY_MASSACRE_ID"]=280735,
-	["EXECUTE_ARMS_ID"]=163201,
+	["EXECUTE_ARMS_PROT_ID"]=163201,
+	["EXECUTE_ARMS_MASSACRE_ID"]=281000,
 
 	["DRAIN_SOUL_ID"]=198590,
 
@@ -17,7 +18,7 @@
 ExecuteRange_Constants.VALID_SPELLS_NAMES_PER_CLASS = {
 	["ROGUE"]="Blindside",
 	["WARLOCK"]="Drain Soul",
-	["PRIEST"]="Drain Soul",
+	["PRIEST"]="Shadow Word: Death",
 	["DEATHKNIGHT"]="Soul Reaper",
 	["WARRIOR"]="Execute",
 	["PALADIN"]="Hammer of Wrath",

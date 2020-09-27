@@ -53,7 +53,7 @@ function ExecuteRange_ButtonsResolver:GetAllButtons()
     local LAB = LibStub("LibActionButton-1.0", true);
     local buttons ={};
     if(LAB) then
-        ExecuteRange_Console:Print("Barteder Detected");
+        ExecuteRange_Console:Print("Bartender Detected");
         for button in pairs(LAB:GetAllButtons()) do
             buttons[button:GetName()] = button;
         end

@@ -9,20 +9,23 @@ local ExecuteRange_Settings = ExecuteRange_Settings;
 function ExecuteRange_SpellAlertsHandler:ShowOrHideFlasher()
     local health = UnitHealth("target");
     local maxHealth = UnitHealthMax("target"); 
-    local percentage = (health/maxHealth) * 100;
+    local percentage = 0;
+    if maxHealth > 0 and health > 0 then
+        percentage = (health/maxHealth) * 100;
+    end
     local executeRange = ExecuteRange_SpellAlertsHandler:GetExecuteRange();
-    -- ExecuteRange_Console:Debug("======== ShowOrHideFlasher start =============");
-	-- ExecuteRange_Console:Debug("info: percentage: " .. percentage);
-    --ExecuteRange_Console:Debug("info: maxHealth: " .. maxHealth);
-    --ExecuteRange_Console:Debug("info: health: " .. health);
-    --ExecuteRange_Console:Debug("info: executeRange: " .. executeRange);	
+    ExecuteRange_Console:Debug("======== ShowOrHideFlasher start =============");
+	ExecuteRange_Console:Debug("info: percentage: " .. percentage);
+    ExecuteRange_Console:Debug("info: maxHealth: " .. maxHealth);
+    ExecuteRange_Console:Debug("info: health: " .. health);
+    ExecuteRange_Console:Debug("info: executeRange: " .. executeRange);	
     local foundButtons = ExecuteRange_ButtonsResolver:GetValidButtons();
 	local skillAvailable = false;
     for id,button in pairs(foundButtons) do
 		local spellId = ExecuteRange_ButtonsResolver:GetButtonSpellId(button);
 		local _, globalCooldown = GetSpellCooldown(61304);
 		local start, duration = GetSpellCooldown(spellId);
-		-- ExecuteRange_Console:Debug("info: GCD: " .. globalCooldown .. ", Spell duration: " .. duration);
+		ExecuteRange_Console:Debug("info: GCD: " .. globalCooldown .. ", Spell duration: " .. duration);
 		if ExecuteRange_DB.profile.showOnCooldown or duration == 0 or globalCooldown >= duration  then -- spell is not on cooldown or is shown always
 			skillAvailable = true;
 		end
@@ -31,7 +34,8 @@ function ExecuteRange_SpellAlertsHandler:ShowOrHideFlasher()
 
     if percentage <= executeRange and not UnitIsDead("target") and UnitCanAttack("player","target") and skillAvailable then 
 --        -- Show Glow
---        -- ExecuteRange_Console:Debug(" =>   Will show alert");
+
+        ExecuteRange_Console:Debug(" =>   Will show alert");
 --        local foundButtons = ExecuteRange_ButtonsResolver:GetValidButtons();
 
         for id,button in pairs(foundButtons) do
@@ -46,7 +50,7 @@ function ExecuteRange_SpellAlertsHandler:ShowOrHideFlasher()
 
     else
         -- Hide Glow
-        -- ExecuteRange_Console:Debug(" =>   Will hide alert");
+        ExecuteRange_Console:Debug(" =>   Will hide alert");
         for id,button in pairs(foundButtons) do
             ActionButton_HideOverlayGlow(button);
         end
@@ -110,9 +114,9 @@ function ExecuteRange_SpellAlertsHandler:GetExecuteRange()
         if ExecuteRange_SpellAlertsHandler:UnitHasBuff("player","Sudden Death") then
             return 101;		--A execute range of 101 will always be higher than the target's life percentage, so the effect will be activated
         else 
-			local talentID, name, texture, selected = GetTalentInfo(5, 2, 1); -- check if massacre is learned
+			local talentID, name, texture, selected = GetTalentInfo(3, 1, 1); -- check if massacre is learned
 			local id, specName = GetSpecializationInfo(GetSpecialization());
-			if specName == "Fury" and selected then  -- Fury with "Massacre" Talent
+			if (specName == "Fury" or specName == "Arms") and selected then  -- Fury with "Massacre" Talent
 				return ExecuteRange_Constants.EXECUTE_RANGE_MASSACRE;
 			else
 				return ExecuteRange_Constants.EXECUTE_RANGE;
