@@ -98,7 +98,19 @@ function ExecuteRange_SpellAlertsHandler:GetExecuteRange()
     if ExecuteRange_Settings.CurrentClass == "ROGUE" then
         return ExecuteRange_Constants.BLINDSIDE_EXECUTE_RANGE;
     elseif ExecuteRange_Settings.CurrentClass == "WARLOCK" then
-        return ExecuteRange_Constants.DRAIN_SOUL_EXECUTE_RANGE;
+        
+        local id, specName = GetSpecializationInfo(GetSpecialization());
+        if specName == "Destruction" then
+            local soulShards=UnitPower("player",7);
+            if soulShards >= 1 then
+                return ExecuteRange_Constants.SHADOWBURN_EXECUTE_RANGE;
+            else
+                return 0; -- No soul shards to cast shadowburn, return 0 to prevent show
+            end
+        else
+            return ExecuteRange_Constants.DRAIN_SOUL_EXECUTE_RANGE;
+        end
+
     elseif ExecuteRange_Settings.CurrentClass == "PRIEST" then
         return ExecuteRange_Constants.SHADOW_WORD_DEATH_EXECUTE_RANGE;
     elseif ExecuteRange_Settings.CurrentClass == "DEATHKNIGHT" then

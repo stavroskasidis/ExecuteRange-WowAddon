@@ -11,13 +11,14 @@
 	["EXECUTE_ARMS_MASSACRE_ID"]=281000,
 
 	["DRAIN_SOUL_ID"]=198590,
+	["SHADOWBURN_ID"]=17877,
 
 	["SOUL_REAPER_ID"]=130736
 };
 
 ExecuteRange_Constants.VALID_SPELLS_NAMES_PER_CLASS = {
 	["ROGUE"]="Blindside",
-	["WARLOCK"]="Drain Soul",
+	["WARLOCK"]="Drain Soul/Shadowburn",
 	["PRIEST"]="Shadow Word: Death",
 	["DEATHKNIGHT"]="Soul Reaper",
 	["WARRIOR"]="Execute",
@@ -26,6 +27,7 @@ ExecuteRange_Constants.VALID_SPELLS_NAMES_PER_CLASS = {
 
 ExecuteRange_Constants.BLINDSIDE_EXECUTE_RANGE = 31; -- it is actually triggered at 31 and below, /shrug
 ExecuteRange_Constants.DRAIN_SOUL_EXECUTE_RANGE = 20;
+ExecuteRange_Constants.SHADOWBURN_EXECUTE_RANGE = 20;
 ExecuteRange_Constants.SHADOW_WORD_DEATH_EXECUTE_RANGE = 20;
 ExecuteRange_Constants.EXECUTE_RANGE = 20;
 ExecuteRange_Constants.EXECUTE_RANGE_MASSACRE = 35;
