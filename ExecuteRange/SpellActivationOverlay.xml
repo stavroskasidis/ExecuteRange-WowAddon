@@ -1,5 +1,7 @@
--- Custom import of blizzard's spellactivationoverlay.lua
--- In 9.0.1 blizzard code spams hide overlays. If this is fixed, this code can be removed and replaced with the original methods (SpellActivationOverlay_ShowOverlay, SpellActivationOverlay_HideOverlays)
+<!-- 
+Custom import of blizzard's spellactivationoverlay.lua
+In 9.0.1 blizzard code spams hide overlays. If this is fixed, this code can be removed and replaced with the original methods (SpellActivationOverlay_ShowOverlay, SpellActivationOverlay_HideOverlays) 
+-->
 
 
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
