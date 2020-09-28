@@ -2,6 +2,7 @@
 local _G = _G --Global enviroment table provided by WoW Api
 local ExecuteRange_Constants = ExecuteRange_Constants;
 local ExecuteRange_Console = ExecuteRange_Console;
+local IsAddOnLoaded = _G.IsAddOnLoaded
 --------------
 
 ExecuteRange_ButtonsResolver.Buttons = nil ; 
@@ -26,12 +27,11 @@ function ExecuteRange_ButtonsResolver:GetValidButtons()
 end
 
 function ExecuteRange_ButtonsResolver:GetButtonSpellId(button)
-	local LAB = LibStub("LibActionButton-1.0", true);
-	local type, spellId; 
-	if(LAB) then --bartender
+	local spellId; 
+	if IsAddOnLoaded('Bartender4') then
 		spellId = button:GetSpellId();
-	else		 --blizzardUI
-		type,spellId = GetActionInfo(button.action);
+	else		 --blizzardUI/dominos
+		_,spellId = GetActionInfo(button.action);
 	end
 
 	return spellId;
@@ -50,13 +50,31 @@ end
 --Gets all the buttons of the UI. Currently Bartender and Blizzard UI are supported
 function ExecuteRange_ButtonsResolver:GetAllButtons()
     
-    local LAB = LibStub("LibActionButton-1.0", true);
+    --TODO
+    --'LibActionButton-1.0-ElvUI'
+	--'LibActionButton-1.0-nMainbar'
+
     local buttons ={};
-    if(LAB) then
-        ExecuteRange_Console:Print("Bartender Detected");
+    if IsAddOnLoaded('Bartender4') then
+        ExecuteRange_Console:Print("Bartender4 Detected");
+        local LAB = LibStub("LibActionButton-1.0", true);
         for button in pairs(LAB:GetAllButtons()) do
             buttons[button:GetName()] = button;
         end
+    elseif IsAddOnLoaded("Dominos") then
+        ExecuteRange_Console:Print("Dominos Detected");
+        for i = 1, 120 do
+            local button = _G["DominosActionButton"..i];
+            if button then
+                buttons[button:GetName()] = button;
+            end
+        end
+        -- Dominos reuses blizzard's UI
+        ExecuteRange_ButtonsResolver:GetBlizzardButtons("ActionButton",buttons);
+        ExecuteRange_ButtonsResolver:GetBlizzardButtons("MultiBarRightButton",buttons);
+        ExecuteRange_ButtonsResolver:GetBlizzardButtons("MultiBarLeftButton",buttons);
+        ExecuteRange_ButtonsResolver:GetBlizzardButtons("MultiBarBottomRightButton",buttons);
+        ExecuteRange_ButtonsResolver:GetBlizzardButtons("MultiBarBottomLeftButton",buttons);
     else
         ExecuteRange_Console:Print("BlizzardUI Detected");
         ExecuteRange_ButtonsResolver:GetBlizzardButtons("ActionButton",buttons);
