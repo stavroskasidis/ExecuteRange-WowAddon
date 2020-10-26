@@ -4,7 +4,8 @@ function ExecuteRange_Core:OnInitialize()
 	local localizedClass, englishClass = UnitClass("player");
     ExecuteRange_Settings.CurrentClass = englishClass;
     
-	ExecuteRange_DB = LibStub("AceDB-3.0"):New("ExecuteRangeDB",ExecuteRange_Settings:GetDefaults(englishClass))
+	ExecuteRange_DB = LibStub("AceDB-3.0"):New("ExecuteRangeDB");
+	ExecuteRange_Settings:InitializeDb(englishClass, ExecuteRange_DB);
     
 
 	for key, alert in pairs(ExecuteRange_DB.profile.alerts) do

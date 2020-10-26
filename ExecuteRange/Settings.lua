@@ -4,115 +4,123 @@ ExecuteRange_Settings.IsDebugEnabled = false;
 --ExecuteRange_Settings.PreviousOptions = nil;
 local previewTimerHandle = nil;
 
-function ExecuteRange_Settings:GetDefaults(playerClass) 
-	local defaultAlerts = {};
-	if playerClass == "HUNTER" then
-		local alert1 = {
-            texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\MASTER_MARKSMAN.BLP"],
-            position = "TOP",
-            scale = 1.5,
-            red = 255,
-            green = 255,
-            blue = 255,
-            verticalFlip = false,
-            horizontalFlip = false;
-        };
-        table.insert(defaultAlerts,alert1);
-	elseif playerClass == "WARLOCK" then
-        local alert1 = {
-            texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DOOM.BLP"],
-            position = "RIGHT",
-            scale = 1,
-            red = 255,
-            green = 255,
-            blue = 255,
-            verticalFlip = false,
-            horizontalFlip = true;
-        };
-        local alert2 = {
-            texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DOOM.BLP"],
-            position = "LEFT",
-            scale = 1,
-            red = 255,
-            green = 255,
-            blue = 255,
-            verticalFlip = false,
-            horizontalFlip = false;
-        };
-        table.insert(defaultAlerts,alert1);
-        table.insert(defaultAlerts,alert2);
-    elseif playerClass == "PRIEST" then
-        local alert1 = {
-            texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DOOM.BLP"],
-            position = "RIGHT",
-            scale = 1,
-            red = 255,
-            green = 255,
-            blue = 255,
-            verticalFlip = false,
-            horizontalFlip = true;
-        };
-        local alert2 = {
-            texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DOOM.BLP"],
-            position = "LEFT",
-            scale = 1,
-            red = 255,
-            green = 255,
-            blue = 255,
-            verticalFlip = false,
-            horizontalFlip = false;
-        };
-        table.insert(defaultAlerts,alert1);
-        table.insert(defaultAlerts,alert2);
-    elseif playerClass == "DEATHKNIGHT" then
-        local alert1 = {
-            texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\NECROPOLIS.BLP"],
-            position = "TOP",
-            scale = 1,
-            red = 255,
-            green = 255,
-            blue = 255,
-            verticalFlip = false,
-            horizontalFlip = false;
-        };
-        table.insert(defaultAlerts,alert1);
-    elseif playerClass == "PALADIN" then
-        local alert1 = {
-            texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\PREDATORY_SWIFTNESS.BLP"],
-            position = "TOP",
-            scale = 1,
-            red = 255,
-            green = 255,
-            blue = 0,
-            verticalFlip = false,
-            horizontalFlip = false;
-        };
-        table.insert(defaultAlerts,alert1);
-    elseif playerClass == "WARRIOR" then
-        local alert1 = {
-            texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\ULTIMATUM.BLP"],
-            position = "TOP",
-            scale = 1,
-            red = 255,
-            green = 255,
-            blue = 255,
-            verticalFlip = false,
-            horizontalFlip = false;
-        };
-        table.insert(defaultAlerts,alert1);
-    end
-    
-    local defaults = {
-        profile = {
-            showSpellAlert = true,
-            enabled = true,
-			showOnCooldown = false,
-            alerts = defaultAlerts
-        }
-    };
-    return defaults;
+function ExecuteRange_Settings:InitializeDb(playerClass, db)
+	if db.profile.showSpellAlert == nil then
+		local defaultAlerts = {};
+		if playerClass == "HUNTER" then
+			local alert1 = {
+				texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\MASTER_MARKSMAN.BLP"],
+				position = "TOP",
+				scale = 1.5,
+				red = 255,
+				green = 255,
+				blue = 255,
+				verticalFlip = false,
+				horizontalFlip = false;
+			};
+			table.insert(defaultAlerts,alert1);
+		elseif playerClass == "WARLOCK" then
+			local alert1 = {
+				texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DOOM.BLP"],
+				position = "RIGHT",
+				scale = 1,
+				red = 255,
+				green = 255,
+				blue = 255,
+				verticalFlip = false,
+				horizontalFlip = true;
+			};
+			local alert2 = {
+				texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DOOM.BLP"],
+				position = "LEFT",
+				scale = 1,
+				red = 255,
+				green = 255,
+				blue = 255,
+				verticalFlip = false,
+				horizontalFlip = false;
+			};
+			table.insert(defaultAlerts,alert1);
+			table.insert(defaultAlerts,alert2);
+		elseif playerClass == "PRIEST" then
+			local alert1 = {
+				texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DOOM.BLP"],
+				position = "RIGHT",
+				scale = 1,
+				red = 255,
+				green = 255,
+				blue = 255,
+				verticalFlip = false,
+				horizontalFlip = true;
+			};
+			local alert2 = {
+				texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DOOM.BLP"],
+				position = "LEFT",
+				scale = 1,
+				red = 255,
+				green = 255,
+				blue = 255,
+				verticalFlip = false,
+				horizontalFlip = false;
+			};
+			table.insert(defaultAlerts,alert1);
+			table.insert(defaultAlerts,alert2);
+		elseif playerClass == "DEATHKNIGHT" then
+			local alert1 = {
+				texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\NECROPOLIS.BLP"],
+				position = "TOP",
+				scale = 1,
+				red = 255,
+				green = 255,
+				blue = 255,
+				verticalFlip = false,
+				horizontalFlip = false;
+			};
+			table.insert(defaultAlerts,alert1);
+		elseif playerClass == "PALADIN" then
+			local alert1 = {
+				texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\PREDATORY_SWIFTNESS.BLP"],
+				position = "TOP",
+				scale = 1,
+				red = 255,
+				green = 255,
+				blue = 0,
+				verticalFlip = false,
+				horizontalFlip = false;
+			};
+			table.insert(defaultAlerts,alert1);
+		elseif playerClass == "WARRIOR" then
+			local alert1 = {
+				texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\ULTIMATUM.BLP"],
+				position = "TOP",
+				scale = 1,
+				red = 255,
+				green = 255,
+				blue = 255,
+				verticalFlip = false,
+				horizontalFlip = false;
+			};
+			table.insert(defaultAlerts,alert1);
+		end
+		
+		local defaults = {
+			profile = {
+				showSpellAlert = true,
+				enabled = true,
+				showOnCooldown = false,
+				alerts = defaultAlerts,
+				optionsVersion = "1.0"  -- For future use, if needed to reset settings
+			}
+		};
+	
+		ExecuteRange_Console:Print("Initializing defaults");
+		db.profile.showSpellAlert = defaults.profile.showSpellAlert;
+		db.profile.enabled = defaults.profile.enabled;
+		db.profile.showOnCooldown = defaults.profile.showOnCooldown;
+		db.profile.alerts = defaults.profile.alerts;
+		db.profile.optionsVersion = defaults.profile.optionsVersion;
+	end
 end
-
 
 function ExecuteRange_Settings:GetOptionsTable()
 	-- doc: https://www.wowace.com/projects/ace3/pages/ace-config-3-0-options-tables
@@ -157,6 +165,7 @@ function ExecuteRange_Settings:GetOptionsTable()
 				desc = "Resets to the default settings",
 				func = function()
 					ExecuteRange_DB:ResetProfile();
+					ExecuteRange_Settings:InitializeDb(ExecuteRange_Settings.CurrentClass, ExecuteRange_DB);
 				end,
 				confirm = function()
 					return "Reset to defaults ?"
@@ -202,7 +211,8 @@ function ExecuteRange_Settings:GetOptionsTable()
 				values = ExecuteRange_Constants.TEXTURE_POSITIONS,
 				get = function(info, position)
 					local alert = ExecuteRange_Settings:GetAlertByPosition(position);
-					return alert ~= nil;
+					local isChecked = alert ~= nil;
+					return isChecked;
 				end,
 				set = function(info, position, state)
 					if state then
@@ -234,8 +244,8 @@ function ExecuteRange_Settings:GetOptionsTable()
 				name =  positionDescription .. " Texture",
 				type = "group",
 				disabled = function()
-				local alert = ExecuteRange_Settings:GetAlertByPosition(position);
-				return alert == nil;
+					local alert = ExecuteRange_Settings:GetAlertByPosition(position);
+					return alert == nil;
 				end,
 				args = {
 					alertTexture = {
