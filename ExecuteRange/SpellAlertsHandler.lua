@@ -140,6 +140,13 @@ function ExecuteRange_SpellAlertsHandler:GetExecuteRange()
 				return ExecuteRange_Constants.EXECUTE_RANGE;
 			end
         end
+    elseif ExecuteRange_Settings.CurrentClass == "MONK" then  
+		local usable = IsUsableSpell(ExecuteRange_Constants.VALID_SPELLS_IDS["TOUCH_OF_DEATH"]);
+        if usable then
+            return 101;		--A execute range of 101 will always be higher than the target's life percentage, so the effect will be activated
+        else 
+            return 0;		--A execute range of 0 will always be lower than the target's life percentage, so the effect will NOT be activated
+        end
     end
 end
     

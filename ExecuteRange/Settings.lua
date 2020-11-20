@@ -101,6 +101,18 @@ function ExecuteRange_Settings:InitializeDb(playerClass, db)
 				horizontalFlip = false;
 			};
 			table.insert(defaultAlerts,alert1);
+		elseif playerClass == "MONK" then
+			local alert1 = {
+				texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\BLOOD_SURGE.BLP"],
+				position = "TOP",
+				scale = 1,
+				red = 255,
+				green = 255,
+				blue = 255,
+				verticalFlip = false,
+				horizontalFlip = false;
+			};
+			table.insert(defaultAlerts,alert1);
 		end
 		
 		local defaults = {

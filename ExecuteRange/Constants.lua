@@ -14,7 +14,9 @@
 	["SOUL_REAPER_ID"]=343294,
 
 	["KILL_SHOT_ID"]=53351,
-	["KILL_SHOT_SURVIVAL_ID"]=320976
+	["KILL_SHOT_SURVIVAL_ID"]=320976,
+
+	["TOUCH_OF_DEATH"] = 322109
 };
 
 ExecuteRange_Constants.OVERLAY_ID = 9999999;
@@ -27,6 +29,7 @@ ExecuteRange_Constants.VALID_SPELLS_NAMES_PER_CLASS = {
 	["WARRIOR"]="Execute",
 	["PALADIN"]="Hammer of Wrath",
 	["HUNTER"]="Kill Shot",
+	["MONK"]="Touch of Death"
 };
 
 ExecuteRange_Constants.DRAIN_SOUL_EXECUTE_RANGE = 20;
