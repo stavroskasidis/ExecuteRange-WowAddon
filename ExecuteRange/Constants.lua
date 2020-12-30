@@ -16,7 +16,9 @@
 	["KILL_SHOT_ID"]=53351,
 	["KILL_SHOT_SURVIVAL_ID"]=320976,
 
-	["TOUCH_OF_DEATH"] = 322109
+	["TOUCH_OF_DEATH_ID"] = 322109,
+
+	["SCORCH_ID"] = 2948
 };
 
 ExecuteRange_Constants.OVERLAY_ID = 9999999;
@@ -29,7 +31,8 @@ ExecuteRange_Constants.VALID_SPELLS_NAMES_PER_CLASS = {
 	["WARRIOR"]="Execute",
 	["PALADIN"]="Hammer of Wrath",
 	["HUNTER"]="Kill Shot",
-	["MONK"]="Touch of Death"
+	["MONK"]="Touch of Death",
+	["MAGE"]="Scorch - Searing Touch"
 };
 
 ExecuteRange_Constants.DRAIN_SOUL_EXECUTE_RANGE = 20;
@@ -40,6 +43,7 @@ ExecuteRange_Constants.EXECUTE_RANGE_MASSACRE = 35;
 ExecuteRange_Constants.SOUL_REAPER_EXECUTE_RANGE = 35;
 ExecuteRange_Constants.HAMMER_OF_WRATH_EXECUTE_RANGE = 20;
 ExecuteRange_Constants.KILL_SHOT_EXECUTE_RANGE = 20;
+ExecuteRange_Constants.SCORCH_EXECUTE_RANGE = 30;
 
 ExecuteRange_Constants.TEXTURE_FILE_IDS = {
 	["TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DEATH.BLP"] = 449493,

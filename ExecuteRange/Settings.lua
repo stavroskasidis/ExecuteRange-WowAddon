@@ -7,7 +7,19 @@ local previewTimerHandle = nil;
 function ExecuteRange_Settings:InitializeDb(playerClass, db)
 	if db.profile.showSpellAlert == nil then
 		local defaultAlerts = {};
-		if playerClass == "HUNTER" then
+		if playerClass == "MAGE" then
+			local alert1 = {
+				texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\BACKLASH.BLP"],
+				position = "TOP",
+				scale = 1,
+				red = 255,
+				green = 255,
+				blue = 255,
+				verticalFlip = false,
+				horizontalFlip = false;
+			};
+			table.insert(defaultAlerts,alert1);
+		elseif playerClass == "HUNTER" then
 			local alert1 = {
 				texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\MASTER_MARKSMAN.BLP"],
 				position = "TOP",

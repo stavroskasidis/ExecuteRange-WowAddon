@@ -26,7 +26,7 @@ function ExecuteRange_Core:OnInitialize()
 	if  ExecuteRange_Settings.CurrentClass ~="WARLOCK" and ExecuteRange_Settings.CurrentClass ~="HUNTER" and
         ExecuteRange_Settings.CurrentClass ~= "PRIEST" and ExecuteRange_Settings.CurrentClass ~="DEATHKNIGHT" and 
 		ExecuteRange_Settings.CurrentClass ~="WARRIOR" and ExecuteRange_Settings.CurrentClass ~="PALADIN" and 
-		ExecuteRange_Settings.CurrentClass ~="MONK" then 
+		ExecuteRange_Settings.CurrentClass ~="MONK" and ExecuteRange_Settings.CurrentClass ~="MAGE" then 
             ExecuteRange_Console:Print("'" .. localizedClass .. "' class is not supported");
 			options = ExecuteRange_Settings:GetClassNotSupportedOptionsTable();
             disableOnInit = true;
@@ -95,9 +95,9 @@ function ExecuteRange_Core:OnEnable()
 
 	--Registers the UNIT_AURA event. This event is fired when a buff, debuff, status, or item bonus was gained by or faded from an entity (player, pet, NPC, or mob.) 
 	--Used to monitor Warrior's Sudden Death and Retribution Paladin's Avenging Wrath
-	if ExecuteRange_Settings.CurrentClass == "WARRIOR" or ExecuteRange_Settings.CurrentClass == "PALADIN" then
-		self:RegisterEvent("UNIT_AURA");
-	end
+	-- if ExecuteRange_Settings.CurrentClass == "WARRIOR" or ExecuteRange_Settings.CurrentClass == "PALADIN" then
+	self:RegisterEvent("UNIT_AURA");
+	--end
 
 	-- self:RegisterEvent("SPELL_ACTIVATION_OVERLAY_HIDE");
 end

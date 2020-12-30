@@ -123,7 +123,16 @@ function ExecuteRange_SpellAlertsHandler:GetExecuteRange()
         else
             return ExecuteRange_Constants.DRAIN_SOUL_EXECUTE_RANGE;
         end
-
+	elseif ExecuteRange_Settings.CurrentClass == "MAGE" then
+        local id, specName = GetSpecializationInfo(GetSpecialization());
+        if specName == "Fire" then
+            local talentID, name, texture, selected = GetTalentInfo(1, 3, 1);
+            if selected then
+                return ExecuteRange_Constants.SCORCH_EXECUTE_RANGE;
+            else
+                return 0; -- Untalented scorch
+            end
+        end
     elseif ExecuteRange_Settings.CurrentClass == "PRIEST" then
         return ExecuteRange_Constants.SHADOW_WORD_DEATH_EXECUTE_RANGE;
     elseif ExecuteRange_Settings.CurrentClass == "DEATHKNIGHT" then
@@ -146,7 +155,7 @@ function ExecuteRange_SpellAlertsHandler:GetExecuteRange()
             return 0;		--A execute range of 0 will always be lower than the target's life percentage, so the effect will NOT be activated
         end
     elseif ExecuteRange_Settings.CurrentClass == "MONK" then  
-		local usable = IsUsableSpell(ExecuteRange_Constants.VALID_SPELLS_IDS["TOUCH_OF_DEATH"]);
+		local usable = IsUsableSpell(ExecuteRange_Constants.VALID_SPELLS_IDS["TOUCH_OF_DEATH_ID"]);
         if usable then
             return 101;		--A execute range of 101 will always be higher than the target's life percentage, so the effect will be activated
         else 
