@@ -102,7 +102,14 @@ end
 function ExecuteRange_SpellAlertsHandler:GetExecuteRange()
     -- ExecuteRange_Console:Debug("geting execute range")	
     if ExecuteRange_Settings.CurrentClass == "HUNTER" then
-        return ExecuteRange_Constants.KILL_SHOT_EXECUTE_RANGE;
+		local usable = IsUsableSpell(ExecuteRange_Constants.VALID_SPELLS_IDS["KILL_SHOT_ID"]);
+		local usableSurv = IsUsableSpell(ExecuteRange_Constants.VALID_SPELLS_IDS["KILL_SHOT_SURVIVAL_ID"]);
+        if usable or usableSurv then
+           return 101;		--A execute range of 101 will always be higher than the target's life percentage, so the effect will be activated
+        else 
+            return 0;		--A execute range of 0 will always be lower than the target's life percentage, so the effect will NOT be activated
+        end
+        -- return ExecuteRange_Constants.KILL_SHOT_EXECUTE_RANGE;
     elseif ExecuteRange_Settings.CurrentClass == "WARLOCK" then
         
         local id, specName = GetSpecializationInfo(GetSpecialization());
@@ -122,23 +129,21 @@ function ExecuteRange_SpellAlertsHandler:GetExecuteRange()
     elseif ExecuteRange_Settings.CurrentClass == "DEATHKNIGHT" then
         return ExecuteRange_Constants.SOUL_REAPER_EXECUTE_RANGE;
     elseif ExecuteRange_Settings.CurrentClass == "PALADIN" then
-        if ExecuteRange_SpellAlertsHandler:UnitHasBuff("player","Avenging Wrath") and UnitLevel("player") >= 58 then
-            -- ExecuteRange_Console:Debug("avenging wrath is active")
-            return 101;		--An execute range of 101 will always be higher than the target's life percentage, so the effect will be activated
-        end
-		return ExecuteRange_Constants.HAMMER_OF_WRATH_EXECUTE_RANGE;
-    elseif ExecuteRange_Settings.CurrentClass == "WARRIOR" then
-        --For Warriors we first check if Sudden Death proc is active. If not return the normal Execute range
-        if ExecuteRange_SpellAlertsHandler:UnitHasBuff("player","Sudden Death") then
+        local usable = IsUsableSpell(ExecuteRange_Constants.VALID_SPELLS_IDS["HAMMER_OF_WRATH_ID"]);
+        if usable then
             return 101;		--A execute range of 101 will always be higher than the target's life percentage, so the effect will be activated
         else 
-			local talentID, name, texture, selected = GetTalentInfo(3, 1, 1); -- check if massacre is learned
-			local id, specName = GetSpecializationInfo(GetSpecialization());
-			if (specName == "Fury" or specName == "Arms") and selected then  -- Fury with "Massacre" Talent
-				return ExecuteRange_Constants.EXECUTE_RANGE_MASSACRE;
-			else
-				return ExecuteRange_Constants.EXECUTE_RANGE;
-			end
+            return 0;		--A execute range of 0 will always be lower than the target's life percentage, so the effect will NOT be activated
+        end
+    elseif ExecuteRange_Settings.CurrentClass == "WARRIOR" then
+		local usable = IsUsableSpell(ExecuteRange_Constants.VALID_SPELLS_IDS["EXECUTE_FURY_ID"]);
+		local usableFuryMass = IsUsableSpell(ExecuteRange_Constants.VALID_SPELLS_IDS["EXECUTE_FURY_MASSACRE_ID"]);
+		local usableArmsProt = IsUsableSpell(ExecuteRange_Constants.VALID_SPELLS_IDS["EXECUTE_ARMS_PROT_ID"]);
+		local usableMass = IsUsableSpell(ExecuteRange_Constants.VALID_SPELLS_IDS["EXECUTE_ARMS_MASSACRE_ID"]);
+        if usable or usableFuryMass or usableArmsProt or usableMass then
+            return 101;		--A execute range of 101 will always be higher than the target's life percentage, so the effect will be activated
+        else 
+            return 0;		--A execute range of 0 will always be lower than the target's life percentage, so the effect will NOT be activated
         end
     elseif ExecuteRange_Settings.CurrentClass == "MONK" then  
 		local usable = IsUsableSpell(ExecuteRange_Constants.VALID_SPELLS_IDS["TOUCH_OF_DEATH"]);
