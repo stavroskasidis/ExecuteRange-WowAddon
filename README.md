@@ -2,7 +2,7 @@
 https://www.curseforge.com/wow/addons/execute-range
 
 ## General
-Dsplays a button glow and an optional spell alert when the target is within "Execute" range.
+Displays a button glow and an optional spell alert when the target is within "Execute" range.
 
 ## Classes - Spells Supported
 * Warlock - Drain Soul / Shadowburn
