@@ -261,9 +261,14 @@ function ExecuteRange_Settings:GetOptionsTable()
 		}
 	}
 
-
 	-- Build Texture options
 	for position, positionDescription in pairs(ExecuteRange_Constants.TEXTURE_POSITIONS) do
+		local alertOnLoad = ExecuteRange_Settings:GetAlertByPosition(position);
+		local texturePreviewOnLoad = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\GENERICTOP_01.BLP"];
+		if alertOnLoad ~= nil then
+			texturePreviewOnLoad = alertOnLoad.texture;
+		end
+
 		local textureOptions = {
 				name =  positionDescription .. " Texture",
 				type = "group",
@@ -272,6 +277,20 @@ function ExecuteRange_Settings:GetOptionsTable()
 					return alert == nil;
 				end,
 				args = {
+					texturePreview = {
+						type = "execute",
+						name = "Selected Texture",
+						desc = "The selected texture",
+						image = texturePreviewOnLoad,
+						imageWidth = 204,
+						imageHeight = 102,
+						imageCoords = {0, 1, 0, 1},
+						func = function()
+							-- do nothing
+						end,
+						width = "full",
+						order = 1
+					},
 					alertTexture = {
 						type = "select",
 						name = "Texture",
@@ -285,10 +304,11 @@ function ExecuteRange_Settings:GetOptionsTable()
 						end,
 						set = function(info, newValue)
 							local alert = ExecuteRange_Settings:GetAlertByPosition(position);
-							alert.texture = newValue
+							alert.texture = newValue;							
+							info.options.args["textureOptions" .. position].args.texturePreview.image = newValue;
 						end,
 						width = "full",
-						order = 1
+						order = 2
 					},
 					alertVerticalFlip = {
 						type = "toggle",
@@ -303,7 +323,7 @@ function ExecuteRange_Settings:GetOptionsTable()
 							local alert = ExecuteRange_Settings:GetAlertByPosition(position);
 							alert.verticalFlip = newValue
 						end,
-						order = 2
+						order = 3
 					},
 					alertHorizontalFlip = {
 						type = "toggle",
@@ -318,7 +338,7 @@ function ExecuteRange_Settings:GetOptionsTable()
 							local alert = ExecuteRange_Settings:GetAlertByPosition(position);
 							alert.horizontalFlip = newValue
 						end,
-						order = 3
+						order = 4
 					},
 					alertTextureColor = {
 						type = "color",
@@ -335,7 +355,7 @@ function ExecuteRange_Settings:GetOptionsTable()
 							alert.green = g * 255;
 							alert.blue = b * 255;
 						end,
-						order = 4
+						order = 5
 					},
 					alertTextureScale = {
 						type = "range",
@@ -354,7 +374,7 @@ function ExecuteRange_Settings:GetOptionsTable()
 							local alert = ExecuteRange_Settings:GetAlertByPosition(position);
 							alert.scale = newValue
 						end,
-						order = 5
+						order = 6
 					}
 			}
 		}
