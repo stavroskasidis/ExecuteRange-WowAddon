@@ -4,18 +4,18 @@ ExecuteRange_Settings.IsDebugEnabled = false;
 --ExecuteRange_Settings.PreviousOptions = nil;
 local previewTimerHandle = nil;
 
-function ExecuteRange_Settings:InitializeDb(playerClass, db)
-	if db.profile.showSpellAlert == nil then
+function ExecuteRange_Settings:InitializeDb(playerClass, db, forceReset)
+	if db.profile.showSpellAlert == nil or forceReset then
 		local defaultAlerts = {};
 		if playerClass == "MAGE" then
 			local alert1 = {
 				texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\BACKLASH.BLP"],
-				position = "TOP",
+				position = "BOTTOM",
 				scale = 1,
 				red = 255,
 				green = 255,
 				blue = 255,
-				verticalFlip = false,
+				verticalFlip = true,
 				horizontalFlip = false;
 			};
 			table.insert(defaultAlerts,alert1);
@@ -189,7 +189,7 @@ function ExecuteRange_Settings:GetOptionsTable()
 				desc = "Resets to the default settings",
 				func = function()
 					ExecuteRange_DB:ResetProfile();
-					ExecuteRange_Settings:InitializeDb(ExecuteRange_Settings.CurrentClass, ExecuteRange_DB);
+					ExecuteRange_Settings:InitializeDb(ExecuteRange_Settings.CurrentClass, ExecuteRange_DB, true);
 				end,
 				confirm = function()
 					return "Reset to defaults ?"

@@ -1,7 +1,7 @@
 ## Interface: 90002
 ## Title: Execute Range
 ## Author: Akira GTX
-## Version: 2.13
+## Version: 2.14
 ## Notes: Displays a button glow and an optional spell alert when the target is within "Execute" range.|n|n|cFFFFFF00Class-Spells Supported:|r|nWarlock - Drain Soul / Shadowburn |nPriest - Shadow Word: Death |nDeath Knight - Soul Reaper |nWarrior - Execute |nPaladin - Hammer of Wrath |nHunter - Kill Shot |nMonk - Touch of Death |nMage - Scorch
 ## DefaultState: Enabled
 ## LoadOnDemand: 0

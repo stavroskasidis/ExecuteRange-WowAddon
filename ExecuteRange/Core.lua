@@ -5,7 +5,7 @@ function ExecuteRange_Core:OnInitialize()
     ExecuteRange_Settings.CurrentClass = englishClass;
     
 	ExecuteRange_DB = LibStub("AceDB-3.0"):New("ExecuteRangeDB");
-	ExecuteRange_Settings:InitializeDb(englishClass, ExecuteRange_DB);
+	ExecuteRange_Settings:InitializeDb(englishClass, ExecuteRange_DB, false);
     
 
 	for key, alert in pairs(ExecuteRange_DB.profile.alerts) do
