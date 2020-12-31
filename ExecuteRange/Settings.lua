@@ -263,11 +263,7 @@ function ExecuteRange_Settings:GetOptionsTable()
 
 	-- Build Texture options
 	for position, positionDescription in pairs(ExecuteRange_Constants.TEXTURE_POSITIONS) do
-		local alertOnLoad = ExecuteRange_Settings:GetAlertByPosition(position);
-		local texturePreviewOnLoad = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\GENERICTOP_01.BLP"];
-		if alertOnLoad ~= nil then
-			texturePreviewOnLoad = alertOnLoad.texture;
-		end
+		
 
 		local textureOptions = {
 				name =  positionDescription .. " Texture",
@@ -281,7 +277,14 @@ function ExecuteRange_Settings:GetOptionsTable()
 						type = "execute",
 						name = "Selected Texture",
 						desc = "The selected texture",
-						image = texturePreviewOnLoad,
+						image = function()
+							local alert = ExecuteRange_Settings:GetAlertByPosition(position);
+							local texturePreview = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\GENERICTOP_01.BLP"];
+							if alert ~= nil then
+								texturePreview = alert.texture;
+							end
+							return texturePreview;
+						end,
 						imageWidth = 204,
 						imageHeight = 102,
 						imageCoords = {0, 1, 0, 1},
@@ -304,8 +307,7 @@ function ExecuteRange_Settings:GetOptionsTable()
 						end,
 						set = function(info, newValue)
 							local alert = ExecuteRange_Settings:GetAlertByPosition(position);
-							alert.texture = newValue;							
-							info.options.args["textureOptions" .. position].args.texturePreview.image = newValue;
+							alert.texture = newValue;
 						end,
 						width = "full",
 						order = 2
