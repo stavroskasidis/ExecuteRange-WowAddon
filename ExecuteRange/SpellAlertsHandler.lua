@@ -132,7 +132,9 @@ function ExecuteRange_SpellAlertsHandler:GetExecuteRange()
             else
                 return 0; -- Untalented scorch
             end
-        end
+        else
+			return 0;
+		end
     elseif ExecuteRange_Settings.CurrentClass == "PRIEST" then
         return ExecuteRange_Constants.SHADOW_WORD_DEATH_EXECUTE_RANGE;
     elseif ExecuteRange_Settings.CurrentClass == "DEATHKNIGHT" then
