@@ -114,9 +114,7 @@ function ExecuteRange_SpellAlertsHandler:GetExecuteRange()
         else 
             return 0;		--A execute range of 0 will always be lower than the target's life percentage, so the effect will NOT be activated
         end
-        -- return ExecuteRange_Constants.KILL_SHOT_EXECUTE_RANGE;
     elseif ExecuteRange_Settings.CurrentClass == "WARLOCK" then
-        
         local id, specName = GetSpecializationInfo(GetSpecialization());
         if specName == "Destruction" then
             local soulShards=UnitPower("player",7);
@@ -152,11 +150,41 @@ function ExecuteRange_SpellAlertsHandler:GetExecuteRange()
             return 0;		--A execute range of 0 will always be lower than the target's life percentage, so the effect will NOT be activated
         end
     elseif ExecuteRange_Settings.CurrentClass == "WARRIOR" then
-		local usable = IsUsableSpell(ExecuteRange_Constants.VALID_SPELLS_IDS["EXECUTE_FURY_ID"]);
-		local usableFuryMass = IsUsableSpell(ExecuteRange_Constants.VALID_SPELLS_IDS["EXECUTE_FURY_MASSACRE_ID"]);
-		local usableArmsProt = IsUsableSpell(ExecuteRange_Constants.VALID_SPELLS_IDS["EXECUTE_ARMS_PROT_ID"]);
-		local usableMass = IsUsableSpell(ExecuteRange_Constants.VALID_SPELLS_IDS["EXECUTE_ARMS_MASSACRE_ID"]);
-        if usable or usableFuryMass or usableArmsProt or usableMass then
+		local id, specName = GetSpecializationInfo(GetSpecialization());
+		local spellIdToCheck = "";
+		if specName == "Arms" or specName == "Protection" then
+			local talentID, name, texture, massacreSelected = GetTalentInfo(3, 1, 1); -- check if massacre is learned
+			if massacreSelected and specName == "Arms" then 
+				if C_Covenants.GetActiveCovenantID() == 2 then --Venthyr covenant
+					spellIdToCheck = ExecuteRange_Constants.VALID_SPELLS_IDS["CONDEMN_ARMS_MASSACRE_ID"];
+				else
+					spellIdToCheck = ExecuteRange_Constants.VALID_SPELLS_IDS["EXECUTE_ARMS_MASSACRE_ID"];
+				end
+			else
+				if C_Covenants.GetActiveCovenantID() == 2 then --Venthyr covenant
+					spellIdToCheck = ExecuteRange_Constants.VALID_SPELLS_IDS["CONDEMN_ARMS_PROT_ID"];
+				else
+					spellIdToCheck = ExecuteRange_Constants.VALID_SPELLS_IDS["EXECUTE_ARMS_PROT_ID"];
+				end
+			end
+		else
+			local talentID, name, texture, massacreSelected = GetTalentInfo(3, 1, 1); -- check if massacre is learned
+			if massacreSelected then 
+				if C_Covenants.GetActiveCovenantID() == 2 then --Venthyr covenant
+					spellIdToCheck = ExecuteRange_Constants.VALID_SPELLS_IDS["CONDEMN_FURY_MASSACRE_ID"];
+				else
+					spellIdToCheck = ExecuteRange_Constants.VALID_SPELLS_IDS["EXECUTE_FURY_MASSACRE_ID"];
+				end
+			else
+				if C_Covenants.GetActiveCovenantID() == 2 then --Venthyr covenant
+					spellIdToCheck = ExecuteRange_Constants.VALID_SPELLS_IDS["CONDEMN_FURY_ID"];
+				else
+					spellIdToCheck = ExecuteRange_Constants.VALID_SPELLS_IDS["EXECUTE_FURY_ID"];
+				end
+			end
+		end
+
+        if IsUsableSpell(spellIdToCheck) then
             return 101;		--A execute range of 101 will always be higher than the target's life percentage, so the effect will be activated
         else 
             return 0;		--A execute range of 0 will always be lower than the target's life percentage, so the effect will NOT be activated
