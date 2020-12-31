@@ -77,7 +77,12 @@ function ExecuteRange_SpellAlertsHandler:ShowSpellAlert(id)
 
         -- Using custom implementation instead of defalt (restore after/if bug is fixed):
         -- SpellActivationOverlay_ShowOverlay(SpellActivationOverlayFrame, id, alert.texture, alert.position, alert.scale, alert.red, alert.green, alert.blue, alert.verticalFlip, alert.horizontalFlip);
-        ExecuteRange_SpellActivationOverlay:SpellActivationOverlay_ShowOverlay(ExecuteRangeSpellActivationOverlayFrame, id, alert.texture, alert.position, alert.scale, alert.red, alert.green, alert.blue, alert.verticalFlip, alert.horizontalFlip);
+        local overlay = ExecuteRange_SpellActivationOverlay:SpellActivationOverlay_ShowOverlay(ExecuteRangeSpellActivationOverlayFrame, id, alert.texture, alert.position, alert.scale, alert.red, alert.green, alert.blue, alert.verticalFlip, alert.horizontalFlip);
+		if id == ExecuteRange_Constants.OVERLAY_PREVIEW_ID then
+			overlay:GetParent():SetFrameStrata("FULLSCREEN_DIALOG");
+		else
+			overlay:GetParent():SetFrameStrata("MEDIUM");
+		end
     end
 end
     

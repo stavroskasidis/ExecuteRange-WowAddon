@@ -72,6 +72,7 @@ function ExecuteRange_SpellActivationOverlay:SpellActivationOverlay_ShowOverlay(
     local overlayParent = overlay:GetParent();
     overlayParent:SetAlpha(overlayAlpha);
 	overlay:Show();
+	return overlay;
 end
 
 function ExecuteRange_SpellActivationOverlay:SpellActivationOverlay_GetOverlay(self, spellID, position)
