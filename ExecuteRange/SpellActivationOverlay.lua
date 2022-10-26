@@ -70,7 +70,7 @@ function ExecuteRange_SpellActivationOverlay:SpellActivationOverlay_ShowOverlay(
     PlaySound(SOUNDKIT.UI_POWER_AURA_GENERIC);
     local overlayAlpha = GetCVar("spellActivationOverlayOpacity");
     local overlayParent = overlay:GetParent();
-    overlayParent:SetAlpha(overlayAlpha);
+    overlayParent:SetAlpha(tonumber(overlayAlpha));
 	overlay:Show();
 	return overlay;
 end

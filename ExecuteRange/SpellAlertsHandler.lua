@@ -129,7 +129,7 @@ function ExecuteRange_SpellAlertsHandler:GetExecuteRange()
 	elseif ExecuteRange_Settings.CurrentClass == "MAGE" then
         local id, specName = GetSpecializationInfo(GetSpecialization());
         if specName == "Fire" then
-            local talentID, name, texture, selected = GetTalentInfo(1, 3, 1);
+            local selected = ExecuteRange_SpellAlertsHandler:HasTalentNode(62212); --Searing Touch talent node
             if selected then
                 return ExecuteRange_Constants.SCORCH_EXECUTE_RANGE;
             else
@@ -152,37 +152,45 @@ function ExecuteRange_SpellAlertsHandler:GetExecuteRange()
     elseif ExecuteRange_Settings.CurrentClass == "WARRIOR" then
 		local id, specName = GetSpecializationInfo(GetSpecialization());
 		local spellIdToCheck = "";
-		if specName == "Arms" or specName == "Protection" then
-			local talentID, name, texture, massacreSelected = GetTalentInfo(3, 1, 1); -- check if massacre is learned
-			if massacreSelected and specName == "Arms" then 
-				if C_Covenants.GetActiveCovenantID() == 2 then --Venthyr covenant
-					spellIdToCheck = ExecuteRange_Constants.VALID_SPELLS_IDS["CONDEMN_ARMS_MASSACRE_ID"];
-				else
-					spellIdToCheck = ExecuteRange_Constants.VALID_SPELLS_IDS["EXECUTE_ARMS_MASSACRE_ID"];
-				end
-			else
-				if C_Covenants.GetActiveCovenantID() == 2 then --Venthyr covenant
+        local massacreSelected = false;
+        local isVenthyrAndInShadowlands = C_Covenants.GetActiveCovenantID() == 2 and ExecuteRange_SpellAlertsHandler:GetContinent() == 1550; --Venthyr covenant and in shadowlands
+        if specName == "Arms" then
+            massacreSelected =  ExecuteRange_SpellAlertsHandler:HasTalentNode(90291); -- check if massacre is learned - arms
+        elseif specName == "Protection" then
+            massacreSelected =  ExecuteRange_SpellAlertsHandler:HasTalentNode(90313, 112168); -- check if massacre is learned - prot
+        else
+            massacreSelected =  ExecuteRange_SpellAlertsHandler:HasTalentNode(90410); -- check if massacre is learned - fury
+        end
+
+        if specName == "Arms" or specName == "Protection" then
+            if massacreSelected then 
+                if isVenthyrAndInShadowlands then
+                    spellIdToCheck = ExecuteRange_Constants.VALID_SPELLS_IDS["CONDEMN_ARMS_PROT_MASSACRE_ID"];
+                else
+                    spellIdToCheck = ExecuteRange_Constants.VALID_SPELLS_IDS["EXECUTE_ARMS_PROT_MASSACRE_ID"];
+                end
+            else
+                if isVenthyrAndInShadowlands then 
 					spellIdToCheck = ExecuteRange_Constants.VALID_SPELLS_IDS["CONDEMN_ARMS_PROT_ID"];
 				else
 					spellIdToCheck = ExecuteRange_Constants.VALID_SPELLS_IDS["EXECUTE_ARMS_PROT_ID"];
 				end
-			end
-		else
-			local talentID, name, texture, massacreSelected = GetTalentInfo(3, 1, 1); -- check if massacre is learned
-			if massacreSelected then 
-				if C_Covenants.GetActiveCovenantID() == 2 then --Venthyr covenant
-					spellIdToCheck = ExecuteRange_Constants.VALID_SPELLS_IDS["CONDEMN_FURY_MASSACRE_ID"];
-				else
-					spellIdToCheck = ExecuteRange_Constants.VALID_SPELLS_IDS["EXECUTE_FURY_MASSACRE_ID"];
-				end
-			else
-				if C_Covenants.GetActiveCovenantID() == 2 then --Venthyr covenant
+            end
+        else
+            if massacreSelected then 
+                if isVenthyrAndInShadowlands then
+                    spellIdToCheck = ExecuteRange_Constants.VALID_SPELLS_IDS["CONDEMN_FURY_MASSACRE_ID"];
+                else
+                    spellIdToCheck = ExecuteRange_Constants.VALID_SPELLS_IDS["EXECUTE_FURY_MASSACRE_ID"];
+                end
+            else
+                if isVenthyrAndInShadowlands then 
 					spellIdToCheck = ExecuteRange_Constants.VALID_SPELLS_IDS["CONDEMN_FURY_ID"];
 				else
 					spellIdToCheck = ExecuteRange_Constants.VALID_SPELLS_IDS["EXECUTE_FURY_ID"];
 				end
-			end
-		end
+            end
+        end
 
         if IsUsableSpell(spellIdToCheck) then
             return 101;		--A execute range of 101 will always be higher than the target's life percentage, so the effect will be activated
@@ -199,3 +207,33 @@ function ExecuteRange_SpellAlertsHandler:GetExecuteRange()
     end
 end
     
+function ExecuteRange_SpellAlertsHandler:HasTalentNode(nodeId, entryId)
+    local configInfo = C_Traits.GetConfigInfo(C_ClassTalents.GetActiveConfigID());
+	local nodeids = C_Traits.GetTreeNodes(configInfo.treeIDs[1]);
+	for i=1, #nodeids do
+		local nodeInfo = C_Traits.GetNodeInfo(configInfo.ID, nodeids[i]);
+        if nodeInfo.ID == nodeId then
+            if entryId ~= nil then 
+                return nodeInfo.activeEntry ~= nil and nodeInfo.activeEntry.entryID == entryId and nodeInfo.ranksPurchased > 0;
+            end
+
+            return nodeInfo.ranksPurchased > 0;
+        end
+	end
+end
+
+
+function ExecuteRange_SpellAlertsHandler:GetContinent()
+    local mapID = C_Map.GetBestMapForUnit("player")
+    if(mapID) then
+        local info = C_Map.GetMapInfo(mapID)
+        if(info) then
+            while(info['mapType'] and info['mapType'] > 2) do
+                info = C_Map.GetMapInfo(info['parentMapID'])
+            end
+            if(info['mapType'] == 2) then
+                return info['mapID']
+            end
+        end
+    end
+end
