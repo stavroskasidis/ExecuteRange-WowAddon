@@ -75,6 +75,9 @@ function ExecuteRange_ButtonsResolver:GetAllButtons()
         ExecuteRange_ButtonsResolver:GetBlizzardButtons("MultiBarLeftButton",buttons);
         ExecuteRange_ButtonsResolver:GetBlizzardButtons("MultiBarBottomRightButton",buttons);
         ExecuteRange_ButtonsResolver:GetBlizzardButtons("MultiBarBottomLeftButton",buttons);
+        ExecuteRange_ButtonsResolver:GetBlizzardButtons("MultiBar5Button",buttons);
+        ExecuteRange_ButtonsResolver:GetBlizzardButtons("MultiBar6Button",buttons);
+        ExecuteRange_ButtonsResolver:GetBlizzardButtons("MultiBar7Button",buttons);
     else
         ExecuteRange_Console:Print("BlizzardUI Detected");
         ExecuteRange_ButtonsResolver:GetBlizzardButtons("ActionButton",buttons);
@@ -83,6 +86,9 @@ function ExecuteRange_ButtonsResolver:GetAllButtons()
         ExecuteRange_ButtonsResolver:GetBlizzardButtons("MultiBarLeftButton",buttons);
         ExecuteRange_ButtonsResolver:GetBlizzardButtons("MultiBarBottomRightButton",buttons);
         ExecuteRange_ButtonsResolver:GetBlizzardButtons("MultiBarBottomLeftButton",buttons);
+        ExecuteRange_ButtonsResolver:GetBlizzardButtons("MultiBar5Button",buttons);
+        ExecuteRange_ButtonsResolver:GetBlizzardButtons("MultiBar6Button",buttons);
+        ExecuteRange_ButtonsResolver:GetBlizzardButtons("MultiBar7Button",buttons);
     end
     return buttons;
 end

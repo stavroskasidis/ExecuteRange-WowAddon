@@ -84,6 +84,7 @@ function ExecuteRange_Core:dump(o, depth)
 	end
 end
 
+
 -- Called when the addon is enabled
 function ExecuteRange_Core:OnEnable()
 
