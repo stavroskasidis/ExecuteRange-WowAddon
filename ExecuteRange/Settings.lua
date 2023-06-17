@@ -394,7 +394,6 @@ function ExecuteRange_Settings:GetClassNotSupportedOptionsTable()
 		type = 'group',
 		args = {
 			message = {
-				name = "ExecuteRange",
 				type = 'description',
 				name = "Class not supported"
 			}

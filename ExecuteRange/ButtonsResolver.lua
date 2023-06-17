@@ -17,7 +17,6 @@ function ExecuteRange_ButtonsResolver:GetValidButtons()
     
     local foundButtons = {};
     for name,button in pairs(ExecuteRange_ButtonsResolver.Buttons) do
-        local LAB = LibStub("LibActionButton-1.0", true);
         local spellId = ExecuteRange_ButtonsResolver:GetButtonSpellId(button);
         if ExecuteRange_ButtonsResolver:TableContainsItem(ExecuteRange_Constants.VALID_SPELLS_IDS,spellId) then
             table.insert(foundButtons,button);
