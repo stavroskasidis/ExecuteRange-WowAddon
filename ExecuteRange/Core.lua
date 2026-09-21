@@ -3,10 +3,10 @@ function ExecuteRange_Core:OnInitialize()
 	-- Init DB
 	local localizedClass, englishClass = UnitClass("player");
     ExecuteRange_Settings.CurrentClass = englishClass;
-    
+
 	ExecuteRange_DB = LibStub("AceDB-3.0"):New("ExecuteRangeDB");
 	ExecuteRange_Settings:InitializeDb(englishClass, ExecuteRange_DB, false);
-    
+
 
 	for key, alert in pairs(ExecuteRange_DB.profile.alerts) do
 		-- backwards compat fix for saved settings before 8.2
@@ -22,15 +22,10 @@ function ExecuteRange_Core:OnInitialize()
 
 	local options = {};
 	local disableOnInit = false;
-	-- local classSupported = true;
-	if  ExecuteRange_Settings.CurrentClass ~="WARLOCK" and ExecuteRange_Settings.CurrentClass ~="HUNTER" and
-        ExecuteRange_Settings.CurrentClass ~= "PRIEST" and ExecuteRange_Settings.CurrentClass ~="DEATHKNIGHT" and 
-		ExecuteRange_Settings.CurrentClass ~="WARRIOR" and ExecuteRange_Settings.CurrentClass ~="PALADIN" and 
-		ExecuteRange_Settings.CurrentClass ~="MONK" and ExecuteRange_Settings.CurrentClass ~="MAGE" then 
-            ExecuteRange_Console:Print("'" .. localizedClass .. "' class is not supported");
-			options = ExecuteRange_Settings:GetClassNotSupportedOptionsTable();
-            disableOnInit = true;
-			--classSupported = false;
+	if not ExecuteRange_Constants.SUPPORTED_CLASSES[ExecuteRange_Settings.CurrentClass] then
+		ExecuteRange_Console:Print("'" .. localizedClass .. "' class is not supported");
+		options = ExecuteRange_Settings:GetClassNotSupportedOptionsTable();
+		disableOnInit = true;
 	else
 		ExecuteRange_Settings.CurrentSpell = ExecuteRange_Constants.VALID_SPELLS_NAMES_PER_CLASS[ExecuteRange_Settings.CurrentClass];
 		options = ExecuteRange_Settings:GetOptionsTable();
@@ -38,74 +33,41 @@ function ExecuteRange_Core:OnInitialize()
 	end
 
 	LibStub("AceConfig-3.0"):RegisterOptionsTable("ExecuteRange", options);
-	ExecuteRange_Core.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("ExecuteRange", "Execute Range");
-	--if classSupported then 
-		-- Init options frame buttons
-	--	ExecuteRange_Core.optionsFrame.default = function()
-	--		ExecuteRange_Console:Debug("Settings form defaults");
-	--		ExecuteRange_DB:ResetProfile();
-	--		LibStub("AceConfigRegistry-3.0"):NotifyChange("ExecuteRange");
-	--	end
-
-	--	ExecuteRange_Core.optionsFrame.refresh = function()
-	--		ExecuteRange_Console:Debug("Settings form refresh");
-	--		ExecuteRange_Settings.PreviousOptions = ExecuteRange_Settings:CopyObject(ExecuteRange_DB.profile);
---end;
-
-	--	ExecuteRange_Core.optionsFrame.cancel = function()
-	--		ExecuteRange_Console:Debug("Settings form cancel");
-	--		ExecuteRange_DB.profile = ExecuteRange_Settings.PreviousOptions;
-	--	end
-	--end
+	ExecuteRange_Core.optionsFrame, ExecuteRange_Core.optionsCategoryID = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("ExecuteRange", "Execute Range");
 	ExecuteRange_Core:RegisterChatCommand("exrange", "SlashCommandHandler", true);
 
 	if disableOnInit then
 		ExecuteRange_Core:Disable();
 	end
-
-	
-	-- for i, button in pairs(ActionBarButtonEventsFrame.frames) do 
-	-- 	 print(ExecuteRange_Core:dump(button,0)); 
-	-- 	-- ActionButton_ShowOverlayGlow(button);
-	-- 	break;
-	-- end
 end
-
-function ExecuteRange_Core:dump(o, depth)
-	if type(o) == 'table' and depth < 1 then
-		local s = '{ '
-		for k,v in pairs(o) do
-			if type(k) ~= 'number' then k = '"'..k..'"' end
-			s = s .. '['..k..'] = ' .. ExecuteRange_Core:dump(v,depth + 1) .. ','
-		end
-		return s .. '} '
-	else
-		return tostring(o)
-	end
-end
-
 
 -- Called when the addon is enabled
 function ExecuteRange_Core:OnEnable()
+	-- Everything funnels into SpellAlertsHandler:ShowOrHideFlasher(), which re-evaluates from scratch.
 
-	--Registers the UNIT_HEALTH event that fires when a unit's health changes
+	--The target's health changed (the payload is the unit token, which is never secret)
 	self:RegisterEvent("UNIT_HEALTH");
 
-	--Registers the PLAYER_TARGET_CHANGED event. This event is fired whenever the player's target is changed, including when the target is lost. 
+	--The player's target changed, including when the target is lost
 	self:RegisterEvent("PLAYER_TARGET_CHANGED");
 
-	--Registers the UNIT_AURA event. This event is fired when a buff, debuff, status, or item bonus was gained by or faded from an entity (player, pet, NPC, or mob.) 
-	--Used to monitor Warrior's Sudden Death and Retribution Paladin's Avenging Wrath
-	-- if ExecuteRange_Settings.CurrentClass == "WARRIOR" or ExecuteRange_Settings.CurrentClass == "PALADIN" then
-	self:RegisterEvent("UNIT_AURA");
-	--end
+	--A spell became usable/unusable or went on/off cooldown (Execute in range, Avenging Wrath for Hammer of Wrath, ...)
+	self:RegisterEvent("SPELL_UPDATE_USABLE");
+	self:RegisterEvent("SPELL_UPDATE_COOLDOWN");
 
-	-- self:RegisterEvent("SPELL_ACTIVATION_OVERLAY_HIDE");
+	--Blizzard's own action-button glow for a spell started/stopped
+	self:RegisterEvent("SPELL_ACTIVATION_OVERLAY_GLOW_SHOW");
+	self:RegisterEvent("SPELL_ACTIVATION_OVERLAY_GLOW_HIDE");
+
+	--A /reload keeps the target, so evaluate once the action bar addons have built their buttons
+	self:ScheduleTimer(function()
+		ExecuteRange_SpellAlertsHandler:ShowOrHideFlasher();
+	end, 1);
 end
 
 -- Called when the addon is disabled
 function ExecuteRange_Core:OnDisable()
-    
+	ExecuteRange_SpellAlertsHandler:Hide();
 end
 
 --UNIT_HEALTH event handler
@@ -124,21 +86,33 @@ function ExecuteRange_Core:PLAYER_TARGET_CHANGED(eventName, arg1)
 	ExecuteRange_SpellAlertsHandler:ShowOrHideFlasher();
 end
 
---UNIT_AURA event handler
+function ExecuteRange_Core:SPELL_UPDATE_USABLE(eventName)
+	ExecuteRange_SpellAlertsHandler:ShowOrHideFlasher();
+end
+
+function ExecuteRange_Core:SPELL_UPDATE_COOLDOWN(eventName)
+	ExecuteRange_SpellAlertsHandler:ShowOrHideFlasher();
+end
+
+--SPELL_ACTIVATION_OVERLAY_GLOW_SHOW/HIDE event handler
 --@param eventName Placeholder parameter by Ace. The name of the event
---@param arg1 the UnitID that triggered the event. e.x. "target","focus"
-function ExecuteRange_Core:UNIT_AURA(eventName, arg1)
-	if arg1 == "player" then
+--@param spellId the spell Blizzard started/stopped glowing
+function ExecuteRange_Core:SPELL_ACTIVATION_OVERLAY_GLOW_SHOW(eventName, spellId)
+	if ExecuteRange_Constants.SPELLS[spellId] ~= nil then
 		ExecuteRange_SpellAlertsHandler:ShowOrHideFlasher();
 	end
 end
 
-function ExecuteRange_Core:SPELL_ACTIVATION_OVERLAY_HIDE(eventName, arg1, arg2, arg3)
-	ExecuteRange_Console:Debug("Hide overlay event, arg1: ", arg1);
+function ExecuteRange_Core:SPELL_ACTIVATION_OVERLAY_GLOW_HIDE(eventName, spellId)
+	if ExecuteRange_Constants.SPELLS[spellId] ~= nil then
+		ExecuteRange_SpellAlertsHandler:ShowOrHideFlasher();
+	end
 end
 
 function ExecuteRange_Core:SlashCommandHandler(msg, editbox)
-	if msg == "debug" then
+	if msg == "status" then
+		ExecuteRange_SpellAlertsHandler:PrintStatus();
+	elseif msg == "debug" then
 		if ExecuteRange_Settings.IsDebugEnabled then
 			ExecuteRange_Console:Print("Debug Disabled");
 			ExecuteRange_Settings.IsDebugEnabled = false;
@@ -147,6 +121,6 @@ function ExecuteRange_Core:SlashCommandHandler(msg, editbox)
 			ExecuteRange_Settings.IsDebugEnabled = true;
 		end
 	else
-		InterfaceOptionsFrame_OpenToCategory(self.optionsFrame);
+		Settings.OpenToCategory(self.optionsCategoryID);
 	end
 end

@@ -1,28 +1,23 @@
-<!-- 
-Custom import of blizzard's spellactivationoverlay.lua
-In 9.0.1 blizzard code spams hide overlays. If this is fixed, this code can be removed and replaced with the original methods (SpellActivationOverlay_ShowOverlay, SpellActivationOverlay_HideOverlays) 
+<!--
+Custom import of Blizzard's SpellActivationOverlay.xml, see SpellActivationOverlay.lua for the frame layout.
 -->
-
-
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
-	<!-- <Script file="SpellActivationOverlay.lua"/> -->
 	<Frame name="ExecuteRangeSpellActivationOverlayTemplate" virtual="true">
 		<Animations>
-			<AnimationGroup name="$parentAnimIn" parentKey="animIn">
+			<AnimationGroup parentKey="animIn">
 				<Alpha fromAlpha="0" toAlpha="1" duration="0.2"/>
 				<Scripts>
 					<OnPlay>ExecuteRange_SpellActivationOverlay:SpellActivationOverlayTexture_OnFadeInPlay(self)</OnPlay>
 					<OnFinished>ExecuteRange_SpellActivationOverlay:SpellActivationOverlayTexture_OnFadeInFinished(self)</OnFinished>
 				</Scripts>
 			</AnimationGroup>
-			<AnimationGroup name="$parentAnimOut" parentKey="animOut">
-				<Alpha fromAlpha="1" toAlpha="0" duration="0.1">
-					<Scripts>
-						<OnFinished>ExecuteRange_SpellActivationOverlay:SpellActivationOverlayTexture_OnFadeOutFinished(self)</OnFinished>
-					</Scripts>
-				</Alpha>
+			<AnimationGroup parentKey="animOut">
+				<Alpha fromAlpha="1" toAlpha="0" duration="0.1"/>
+				<Scripts>
+					<OnFinished>ExecuteRange_SpellActivationOverlay:SpellActivationOverlayTexture_OnFadeOutFinished(self)</OnFinished>
+				</Scripts>
 			</AnimationGroup>
-			<AnimationGroup name="$parentPulse" looping="REPEAT" parentKey="pulse">
+			<AnimationGroup looping="REPEAT" parentKey="pulse">
 				<Scale scaleX="1.08" scaleY="1.08" duration="0.5" smoothing="IN_OUT" order="1"/>
 				<Scale scaleX="0.9259" scaleY="0.9259" duration="0.5" smoothing="IN_OUT" order="2"/>
 			</AnimationGroup>
@@ -36,14 +31,42 @@ In 9.0.1 blizzard code spams hide overlays. If this is fixed, this code can be r
 			<OnShow>ExecuteRange_SpellActivationOverlay:SpellActivationOverlayTexture_OnShow(self)</OnShow>
 		</Scripts>
 	</Frame>
-	<Frame name="ExecuteRangeSpellActivationOverlayFrame" parent="UIParent">
+
+	<!-- Live alert: the overlay frame sits under two gate frames whose alpha SpellAlertsHandler drives -->
+	<Frame name="ExecuteRangeAlertGateFrame" parent="UIParent">
+		<Size x="1" y="1"/>
+		<Anchors>
+			<Anchor point="CENTER"/>
+		</Anchors>
+		<Frames>
+			<Frame parentKey="CooldownGate">
+				<Size x="1" y="1"/>
+				<Anchors>
+					<Anchor point="CENTER"/>
+				</Anchors>
+				<Frames>
+					<Frame name="ExecuteRangeSpellActivationOverlayFrame" mixin="ExecuteRange_SpellActivationOverlay">
+						<Size x="256" y="256"/>
+						<Anchors>
+							<Anchor point="CENTER"/>
+						</Anchors>
+						<Scripts>
+							<OnLoad method="OnLoad"/>
+						</Scripts>
+					</Frame>
+				</Frames>
+			</Frame>
+		</Frames>
+	</Frame>
+
+	<!-- Settings "Preview": above the settings panel and never gated -->
+	<Frame name="ExecuteRangeSpellActivationOverlayPreviewFrame" mixin="ExecuteRange_SpellActivationOverlay" parent="UIParent" frameStrata="FULLSCREEN_DIALOG">
 		<Size x="256" y="256"/>
 		<Anchors>
 			<Anchor point="CENTER"/>
 		</Anchors>
 		<Scripts>
-			<OnLoad>ExecuteRange_SpellActivationOverlay:SpellActivationOverlay_OnLoad(self)</OnLoad>
-			<!-- <OnEvent function="SpellActivationOverlay_OnEvent"/> -->
+			<OnLoad method="OnLoad"/>
 		</Scripts>
 	</Frame>
 </Ui>

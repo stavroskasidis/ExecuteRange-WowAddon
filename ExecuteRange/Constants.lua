@@ -1,34 +1,44 @@
-﻿ExecuteRange_Constants.VALID_SPELLS_IDS = {				
-	["SHADOW_WORD_DEATH_ID"]=32379,
-
-    ["HAMMER_OF_WRATH_ID"]=24275,
-
-    ["EXECUTE_FURY_ID"]=5308,
-	["EXECUTE_FURY_MASSACRE_ID"]=280735,
-	["EXECUTE_ARMS_PROT_ID"]=163201,
-	["EXECUTE_ARMS_PROT_MASSACRE_ID"]=281000,
-
-	["CONDEMN_ARMS_PROT_ID"]=317349,
-	["CONDEMN_FURY_ID"]=317485,
-	["CONDEMN_FURY_MASSACRE_ID"]=330325,
-	["CONDEMN_ARMS_PROT_MASSACRE_ID"]=330334,
-
-	["DRAIN_SOUL_ID"]=198590,
-	["SHADOWBURN_ID"]=17877,
-
-	["SOUL_REAPER_ID"]=343294,
-
-	["KILL_SHOT_ID"]=53351,
-	["KILL_SHOT_SURVIVAL_ID"]=320976,
-
-	["TOUCH_OF_DEATH_ID"] = 322109,
-
-	["SCORCH_ID"] = 2948
+﻿-- Every spell the addon can alert for, keyed by spell ID. Action-bar buttons are matched against these.
+--   threshold: the spell is always castable and only *benefits* from the target being at or below this
+--              health %. The addon never reads the target's health (it is a secret value since 12.0);
+--              the threshold is fed through a curve that drives the alert's alpha (see SpellAlertsHandler).
+--   no threshold: the spell is only castable in execute range, so C_Spell.IsSpellUsable() decides.
+ExecuteRange_Constants.SPELLS = {
+	-- Priest
+	[32379]  = { class = "PRIEST",      name = "Shadow Word: Death", threshold = 20 },
+	-- Paladin
+	[24275]  = { class = "PALADIN",     name = "Hammer of Wrath" },
+	-- Warrior (Massacre replaces Execute with the 35% variants)
+	[5308]   = { class = "WARRIOR",     name = "Execute" },             -- Fury
+	[280735] = { class = "WARRIOR",     name = "Execute" },             -- Fury, Massacre
+	[163201] = { class = "WARRIOR",     name = "Execute" },             -- Arms / Protection
+	[281000] = { class = "WARRIOR",     name = "Execute" },             -- Arms / Protection, Massacre
+	-- Warlock
+	[198590] = { class = "WARLOCK",     name = "Drain Soul", threshold = 20 },  -- Affliction
+	[17877]  = { class = "WARLOCK",     name = "Shadowburn" },                  -- Destruction
+	-- Death Knight
+	[343294] = { class = "DEATHKNIGHT", name = "Soul Reaper" },
+	-- Hunter (Dark Ranger's Black Arrow replaces Kill Shot)
+	[53351]  = { class = "HUNTER",      name = "Kill Shot" },            -- Beast Mastery / Marksmanship
+	[320976] = { class = "HUNTER",      name = "Kill Shot" },            -- Survival
+	[466930] = { class = "HUNTER",      name = "Black Arrow" },
+	[468572] = { class = "HUNTER",      name = "Black Arrow" },
+	-- Monk
+	[322109] = { class = "MONK",        name = "Touch of Death" },
+	-- Mage
+	[2948]   = { class = "MAGE",        name = "Scorch", threshold = 30 },
 };
 
+ExecuteRange_Constants.SUPPORTED_CLASSES = {};
+for _, spell in pairs(ExecuteRange_Constants.SPELLS) do
+	ExecuteRange_Constants.SUPPORTED_CLASSES[spell.class] = true;
+end
+
+-- Fake spell IDs used to key our overlays in the SpellActivationOverlay frames
 ExecuteRange_Constants.OVERLAY_ID = 9999999;
 ExecuteRange_Constants.OVERLAY_PREVIEW_ID = 9999998;
 
+-- Shown in the options panel title
 ExecuteRange_Constants.VALID_SPELLS_NAMES_PER_CLASS = {
 	["WARLOCK"]="Drain Soul/Shadowburn",
 	["PRIEST"]="Shadow Word: Death",
@@ -37,14 +47,8 @@ ExecuteRange_Constants.VALID_SPELLS_NAMES_PER_CLASS = {
 	["PALADIN"]="Hammer of Wrath",
 	["HUNTER"]="Kill Shot",
 	["MONK"]="Touch of Death",
-	["MAGE"]="Scorch - Searing Touch"
+	["MAGE"]="Scorch"
 };
-
-ExecuteRange_Constants.DRAIN_SOUL_EXECUTE_RANGE = 20;
-ExecuteRange_Constants.SHADOWBURN_EXECUTE_RANGE = 20;
-ExecuteRange_Constants.SHADOW_WORD_DEATH_EXECUTE_RANGE = 20;
-ExecuteRange_Constants.SOUL_REAPER_EXECUTE_RANGE = 35;
-ExecuteRange_Constants.SCORCH_EXECUTE_RANGE = 30;
 
 ExecuteRange_Constants.TEXTURE_FILE_IDS = {
 	["TEXTURES\\SPELLACTIVATIONOVERLAYS\\SUDDEN_DEATH.BLP"] = 449493,

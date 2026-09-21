@@ -1,7 +1,6 @@
 ﻿ExecuteRange_Settings.CurrentClass = '';
 ExecuteRange_Settings.CurrentSpell = '';
 ExecuteRange_Settings.IsDebugEnabled = false;
---ExecuteRange_Settings.PreviousOptions = nil;
 local previewTimerHandle = nil;
 
 function ExecuteRange_Settings:InitializeDb(playerClass, db, forceReset)
@@ -205,13 +204,13 @@ function ExecuteRange_Settings:GetOptionsTable()
 					if previewTimerHandle ~= nil then
 						ExecuteRange_Core:CancelTimer(previewTimerHandle);
 					end
-					ExecuteRange_SpellAlertsHandler:HideSpellAlert(ExecuteRange_Constants.OVERLAY_PREVIEW_ID);
+					ExecuteRange_SpellAlertsHandler:HideSpellAlert(ExecuteRangeSpellActivationOverlayPreviewFrame, ExecuteRange_Constants.OVERLAY_PREVIEW_ID);
 					previewTimerHandle = ExecuteRange_Core:ScheduleTimer(function()
 						ExecuteRange_Console:Debug("Hiding preview overlay");
-						ExecuteRange_SpellAlertsHandler:HideSpellAlert(ExecuteRange_Constants.OVERLAY_PREVIEW_ID);
+						ExecuteRange_SpellAlertsHandler:HideSpellAlert(ExecuteRangeSpellActivationOverlayPreviewFrame, ExecuteRange_Constants.OVERLAY_PREVIEW_ID);
 						previewTimerHandle = nil;
 					end,8);
-					ExecuteRange_SpellAlertsHandler:ShowSpellAlert(ExecuteRange_Constants.OVERLAY_PREVIEW_ID);
+					ExecuteRange_SpellAlertsHandler:ShowSpellAlert(ExecuteRangeSpellActivationOverlayPreviewFrame, ExecuteRange_Constants.OVERLAY_PREVIEW_ID, true);
 				end,
 				width = "half",
 				order = 4
@@ -409,13 +408,3 @@ function ExecuteRange_Settings:GetAlertByPosition(position)
     end
     return nil;
 end
-
--- function ExecuteRange_Settings:CopyObject(obj, seen)
--- 	if type(obj) ~= 'table' then return obj end
--- 	if seen and seen[obj] then return seen[obj] end
--- 	local s = seen or {}
--- 	local res = setmetatable({}, getmetatable(obj))
--- 	s[obj] = res
--- 	for k, v in pairs(obj) do res[ExecuteRange_Settings:CopyObject(k, s)] = ExecuteRange_Settings:CopyObject(v, s) end
--- 	return res
--- end

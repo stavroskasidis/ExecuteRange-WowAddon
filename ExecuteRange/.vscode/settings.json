@@ -1,6 +1,5 @@
 {
     "Lua.diagnostics.globals": [
-        "InterfaceOptionsFrame_OpenToCategory",
         "DEFAULT_CHAT_FRAME",
         "SELECTED_CHAT_FRAME",
         "NORMAL_FONT_COLOR",
@@ -28,10 +27,13 @@
         "IsSecureCmd",
         "NUM_CHAT_WINDOWS",
         "ChatEdit_GetActiveWindow",
-        "ActionButton_ShowOverlayGlow",
-        "ActionButton_HideOverlayGlow",
-        "SpellActivationOverlay_ShowOverlay",
-        "SpellActivationOverlayFrame",
-        "SpellActivationOverlay_HideOverlays"
+        "CreateFramePool",
+        "ExecuteRangeAlertGateFrame",
+        "ExecuteRangeSpellActivationOverlayFrame",
+        "ExecuteRangeSpellActivationOverlayPreviewFrame",
+        "GetActionInfo",
+        "PlaySound",
+        "SOUNDKIT",
+        "UnitHealthPercent"
     ]
 }

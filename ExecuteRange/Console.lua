@@ -11,10 +11,9 @@ end
 
 function ExecuteRange_Console:Print(msg)
 	ExecuteRange_Core:Print(msg);
-    
-    
 end
 
+-- Dumps the current talent tree (node/entry/spell IDs). Debugging aid, run from /run
 function ExecuteRange_Console:PrintTalentNodes()
 	local configInfo = C_Traits.GetConfigInfo(C_ClassTalents.GetActiveConfigID());
 	local nodeids = C_Traits.GetTreeNodes(configInfo.treeIDs[1]);
@@ -23,12 +22,13 @@ function ExecuteRange_Console:PrintTalentNodes()
 		for j=1, #nodeInfo.entryIDs do
 			local entryInfo = C_Traits.GetEntryInfo(configInfo.ID, nodeInfo.entryIDs[j]);
 			local definitionInfo = C_Traits.GetDefinitionInfo(entryInfo.definitionID);
-			local spellName = GetSpellInfo(definitionInfo.spellID);	
+			local spellID = definitionInfo and definitionInfo.spellID or 0;
+			local spellName = C_Spell.GetSpellName(spellID) or "?";
 			local activeEntryId = "";
 			if nodeInfo.activeEntry ~= nil then
 				activeEntryId = nodeInfo.activeEntry.entryID;
 			end
-			print("Node: " .. nodeInfo.ID .. ",SpellName:" .. spellName ..  ",Rank:" .. nodeInfo.ranksPurchased .. ",Entryid:" .. nodeInfo.entryIDs[j] .. "ActiveEntry:" .. activeEntryId ..",SpellId: " .. definitionInfo.spellID)
+			print("Node: " .. nodeInfo.ID .. ",SpellName:" .. spellName ..  ",Rank:" .. nodeInfo.ranksPurchased .. ",Entryid:" .. nodeInfo.entryIDs[j] .. "ActiveEntry:" .. activeEntryId ..",SpellId: " .. spellID)
 		end
 	end
 end

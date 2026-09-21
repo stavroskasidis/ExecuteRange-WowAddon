@@ -2,10 +2,10 @@
 local _G = _G --Global enviroment table provided by WoW Api
 local ExecuteRange_Constants = ExecuteRange_Constants;
 local ExecuteRange_Console = ExecuteRange_Console;
-local IsAddOnLoaded = _G.IsAddOnLoaded
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded;
 --------------
 
-ExecuteRange_ButtonsResolver.Buttons = nil ; 
+ExecuteRange_ButtonsResolver.Buttons = nil ;
 
 --Finds the buttons that have valid abilities e.x. "Execute", "Hammer of Wrath" etc
 --@param buttons The array of buttons to look into
@@ -14,41 +14,36 @@ function ExecuteRange_ButtonsResolver:GetValidButtons()
     if ExecuteRange_ButtonsResolver.Buttons == nil then
         ExecuteRange_ButtonsResolver.Buttons = ExecuteRange_ButtonsResolver:GetAllButtons();
     end
-    
+
     local foundButtons = {};
     for name,button in pairs(ExecuteRange_ButtonsResolver.Buttons) do
         local spellId = ExecuteRange_ButtonsResolver:GetButtonSpellId(button);
-        if ExecuteRange_ButtonsResolver:TableContainsItem(ExecuteRange_Constants.VALID_SPELLS_IDS,spellId) then
+        if spellId ~= nil and ExecuteRange_Constants.SPELLS[spellId] ~= nil then
             table.insert(foundButtons,button);
         end
     end
     return foundButtons;
 end
 
+--Gets the spell ID a button casts, or nil if the button holds no spell (macros that cast a spell count)
 function ExecuteRange_ButtonsResolver:GetButtonSpellId(button)
-	local spellId; 
 	if IsAddOnLoaded('Bartender4') then
-		spellId = button:GetSpellId();
-	else		 --blizzardUI/dominos
-		_,spellId = GetActionInfo(button.action);
+		return button:GetSpellId();
 	end
-
-	return spellId;
-end
-
---Checks if an item is contained in a table
---@param tbl The table to check
---@param item The item to check if it exists in the table
-function ExecuteRange_ButtonsResolver:TableContainsItem(tbl, item)
-    for key, value in pairs(tbl) do
-        if value == item then return true end
-    end
-    return false
+	--blizzardUI/dominos
+	if button.action == nil then
+		return nil;
+	end
+	local actionType, id, subType = GetActionInfo(button.action);
+	if actionType == "spell" or (actionType == "macro" and subType == "spell") then
+		return id;
+	end
+	return nil;
 end
 
 --Gets all the buttons of the UI. Currently Bartender and Blizzard UI are supported
 function ExecuteRange_ButtonsResolver:GetAllButtons()
-    
+
     --TODO
     --'LibActionButton-1.0-ElvUI'
 	--'LibActionButton-1.0-nMainbar'
@@ -80,7 +75,6 @@ function ExecuteRange_ButtonsResolver:GetAllButtons()
     else
         ExecuteRange_Console:Print("BlizzardUI Detected");
         ExecuteRange_ButtonsResolver:GetBlizzardButtons("ActionButton",buttons);
-        ExecuteRange_ButtonsResolver:GetBlizzardButtons("BonusActionButton",buttons);
         ExecuteRange_ButtonsResolver:GetBlizzardButtons("MultiBarRightButton",buttons);
         ExecuteRange_ButtonsResolver:GetBlizzardButtons("MultiBarLeftButton",buttons);
         ExecuteRange_ButtonsResolver:GetBlizzardButtons("MultiBarBottomRightButton",buttons);
