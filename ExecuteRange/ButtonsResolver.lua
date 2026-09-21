@@ -7,7 +7,7 @@ local IsAddOnLoaded = C_AddOns.IsAddOnLoaded;
 
 ExecuteRange_ButtonsResolver.Buttons = nil ;
 
---Finds the buttons that have valid abilities e.x. "Execute", "Hammer of Wrath" etc
+--Finds the buttons that have valid abilities e.x. "Execute", "Kill Shot" etc
 --@param buttons The array of buttons to look into
 function ExecuteRange_ButtonsResolver:GetValidButtons()
     --init buttons array

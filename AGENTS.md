@@ -4,9 +4,9 @@ Guidance for AI coding agents working in this repository.
 
 ## What this is
 
-ExecuteRange is a World of Warcraft (retail) addon written in Lua on the Ace3 framework. It glows the action-bar button of the player's class "execute" spell (Warrior Execute, Paladin Hammer of Wrath, Hunter Kill Shot/Black Arrow, Priest Shadow Word: Death, Warlock Drain Soul/Shadowburn, DK Soul Reaper, Monk Touch of Death, Mage Scorch) when the target is in execute range, and optionally shows a configurable full-screen spell-alert overlay. Supports Bartender4, Dominos and the default Blizzard bars. Published on CurseForge: https://www.curseforge.com/wow/addons/execute-range
+ExecuteRange is a World of Warcraft (retail) addon written in Lua on the Ace3 framework. It glows the action-bar button of the player's class "execute" spell (Warrior Execute, Hunter Kill Shot/Black Arrow, Priest Shadow Word: Death, Warlock Drain Soul/Shadowburn, DK Soul Reaper, Monk Touch of Death, Mage Scorch) when the target is in execute range, and optionally shows a configurable full-screen spell-alert overlay. Supports Bartender4, Dominos and the default Blizzard bars. Published on CurseForge: https://www.curseforge.com/wow/addons/execute-range
 
-Targets the live retail client (Midnight, 12.1). Since 12.0 combat data is subject to **secret values** (see below); every design decision in `SpellAlertsHandler.lua` follows from that.
+Targets the live retail client (Midnight, 12.1). Since 12.0 combat data is subject to **secret values** (see below); every design decision in `SpellAlertsHandler.lua` follows from that. Paladin is deliberately unsupported since 4.0: Hammer of Wrath became a Judgment override during Avenging Wrath in 12.0.0 with no execute condition. Kill Shot is Marksmanship-only since 12.0.0.
 
 ## Development workflow
 
@@ -52,7 +52,7 @@ Only the libs listed in `embeds.xml` are loaded; extra Ace3 libs in `Libs/` (Ace
 
 Since 12.0, `UnitHealth`/`UnitHealthPercent` on an enemy and cooldown data in combat return *secret values*: they can be stored and passed to a few widget APIs, but any comparison/arithmetic in addon code is an immediate Lua error. The addon therefore never inspects the target's health. `Constants.SPELLS` (keyed by spell ID) declares one of two modes per spell:
 
-- **usable** (no `threshold`; Execute, Hammer of Wrath, Kill Shot/Black Arrow, Touch of Death, Soul Reaper, Shadowburn): the spell is only castable in execute range, and `C_Spell.IsSpellUsable()` is never secret, so the addon knows the answer and shows/hides outright (with the fade-in and sound). Spell overrides (Massacre, Black Arrow) are covered via `C_Spell.GetOverrideSpell`.
+- **usable** (no `threshold`; Execute, Kill Shot/Black Arrow, Touch of Death, Soul Reaper, Shadowburn): the spell is only castable in execute range, and `C_Spell.IsSpellUsable()` is never secret, so the addon knows the answer and shows/hides outright (with the fade-in and sound). Spell overrides (Massacre, Black Arrow) are covered via `C_Spell.GetOverrideSpell`.
 - **threshold** (`threshold = N`; Shadow Word: Death 20, Drain Soul 20, Scorch 30): the alert is shown (silently) whenever an attackable target exists, and its visibility is a *display* concern: `UnitHealthPercent("target", true, curve)` evaluates a step-like `C_CurveUtil` curve (1 at/below the threshold, else 0) and the result, possibly secret, goes straight into `Frame:SetAlpha`, which accepts secrets from addon code.
 
 `C_SpellActivationOverlay.IsSpellOverlayed(spellId)` (Blizzard's own button glow, never secret) counts as "in range" for either mode, and buttons Blizzard already glows get no addon glow.

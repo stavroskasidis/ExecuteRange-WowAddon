@@ -9,7 +9,7 @@ local ExecuteRange_Core = ExecuteRange_Core;
 -- addon can store and pass them around but any comparison or arithmetic on them is a Lua error. The
 -- decision "is the target in execute range" is therefore split in two:
 --
---   * usable spells (Execute, Hammer of Wrath, Kill Shot, Touch of Death, Soul Reaper, Shadowburn): the
+--   * usable spells (Execute, Kill Shot, Touch of Death, Soul Reaper, Shadowburn): the
 --     spell is only castable in execute range, and C_Spell.IsSpellUsable() is never secret, so the addon
 --     knows the answer and shows/hides the alert outright.
 --   * threshold spells (Shadow Word: Death, Drain Soul, Scorch): the alert is shown whenever an attackable

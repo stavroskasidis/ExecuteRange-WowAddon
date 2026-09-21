@@ -6,8 +6,6 @@
 ExecuteRange_Constants.SPELLS = {
 	-- Priest
 	[32379]  = { class = "PRIEST",      name = "Shadow Word: Death", threshold = 20 },
-	-- Paladin
-	[24275]  = { class = "PALADIN",     name = "Hammer of Wrath" },
 	-- Warrior (Massacre replaces Execute with the 35% variants)
 	[5308]   = { class = "WARRIOR",     name = "Execute" },             -- Fury
 	[280735] = { class = "WARRIOR",     name = "Execute" },             -- Fury, Massacre
@@ -18,9 +16,8 @@ ExecuteRange_Constants.SPELLS = {
 	[17877]  = { class = "WARLOCK",     name = "Shadowburn" },                  -- Destruction
 	-- Death Knight
 	[343294] = { class = "DEATHKNIGHT", name = "Soul Reaper" },
-	-- Hunter (Dark Ranger's Black Arrow replaces Kill Shot)
-	[53351]  = { class = "HUNTER",      name = "Kill Shot" },            -- Beast Mastery / Marksmanship
-	[320976] = { class = "HUNTER",      name = "Kill Shot" },            -- Survival
+	-- Hunter (Kill Shot is Marksmanship-only since 12.0; Dark Ranger's Black Arrow replaces it / is BM's version)
+	[53351]  = { class = "HUNTER",      name = "Kill Shot" },
 	[466930] = { class = "HUNTER",      name = "Black Arrow" },
 	[468572] = { class = "HUNTER",      name = "Black Arrow" },
 	-- Monk
@@ -44,8 +41,7 @@ ExecuteRange_Constants.VALID_SPELLS_NAMES_PER_CLASS = {
 	["PRIEST"]="Shadow Word: Death",
 	["DEATHKNIGHT"]="Soul Reaper",
 	["WARRIOR"]="Execute",
-	["PALADIN"]="Hammer of Wrath",
-	["HUNTER"]="Kill Shot",
+	["HUNTER"]="Kill Shot/Black Arrow",
 	["MONK"]="Touch of Death",
 	["MAGE"]="Scorch"
 };

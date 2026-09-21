@@ -51,7 +51,7 @@ function ExecuteRange_Core:OnEnable()
 	--The player's target changed, including when the target is lost
 	self:RegisterEvent("PLAYER_TARGET_CHANGED");
 
-	--A spell became usable/unusable or went on/off cooldown (Execute in range, Avenging Wrath for Hammer of Wrath, ...)
+	--A spell became usable/unusable or went on/off cooldown (Execute in range, ...)
 	self:RegisterEvent("SPELL_UPDATE_USABLE");
 	self:RegisterEvent("SPELL_UPDATE_COOLDOWN");
 

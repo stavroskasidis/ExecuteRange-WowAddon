@@ -88,18 +88,6 @@ function ExecuteRange_Settings:InitializeDb(playerClass, db, forceReset)
 				horizontalFlip = false;
 			};
 			table.insert(defaultAlerts,alert1);
-		elseif playerClass == "PALADIN" then
-			local alert1 = {
-				texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\PREDATORY_SWIFTNESS.BLP"],
-				position = "TOP",
-				scale = 1,
-				red = 255,
-				green = 255,
-				blue = 0,
-				verticalFlip = false,
-				horizontalFlip = false;
-			};
-			table.insert(defaultAlerts,alert1);
 		elseif playerClass == "WARRIOR" then
 			local alert1 = {
 				texture = ExecuteRange_Constants.TEXTURE_FILE_IDS["TEXTURES\\SPELLACTIVATIONOVERLAYS\\ULTIMATUM.BLP"],
