@@ -2,3 +2,9 @@ textures/
 .vs/
 *.wowproj.user
 *.zip
+
+# Machine-specific deploy settings (WoW install location)
+deploy.config.json
+
+# Assembled addon folder + CurseForge zip, produced by build.ps1
+build/
